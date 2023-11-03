@@ -65,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
                               child: TextFormField(
                                 obscureText: isHidden,
                                 decoration: InputDecoration(
-                                  labelText: "Şifre",
+                                  labelText: "Şifreee",
                                   hintText: "",
                                   prefixIcon: Icon(Icons.key),
                                   suffixIcon: IconButton(
