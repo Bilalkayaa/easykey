@@ -1,15 +1,13 @@
-import 'package:easykey/screens/main_page.dart';
-import 'package:easykey/screens/signup_page.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class SignupPage extends StatefulWidget {
+  const SignupPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SignupPage> createState() => _SignupPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignupPageState extends State<SignupPage> {
   bool isHidden = true;
   void Chngvisibility() {
     setState(() {
@@ -38,11 +36,11 @@ class _LoginPageState extends State<LoginPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
-                          height: 120,
+                          height: 100,
                         ),
                         Container(
                           child: Text(
-                            "EasyKey",
+                            "Kayıt Ol",
                             style: TextStyle(fontSize: 32, letterSpacing: 2),
                           ),
                         ),
@@ -56,9 +54,11 @@ class _LoginPageState extends State<LoginPage> {
                                   vertical:
                                       8.0), // Aralık eklemek için margin kullanıyoruz
                               child: TextFormField(
+                                focusNode: FocusNode(skipTraversal: false),
                                 decoration: InputDecoration(
-                                    labelText: "Kullanıcı adı",
-                                    hintText: "",
+                                    hintText: "Kullanıcı adını giriniz",
+                                    hintStyle: TextStyle(
+                                        fontWeight: FontWeight.normal),
                                     prefixIcon: Icon(Icons.person)),
                               ),
                             ),
@@ -67,8 +67,9 @@ class _LoginPageState extends State<LoginPage> {
                               child: TextFormField(
                                 obscureText: isHidden,
                                 decoration: InputDecoration(
-                                  labelText: "Şifre",
-                                  hintText: "",
+                                  hintText: "Şifrenizi giriniz",
+                                  hintStyle:
+                                      TextStyle(fontWeight: FontWeight.normal),
                                   prefixIcon: Icon(Icons.key),
                                   suffixIcon: IconButton(
                                       onPressed: Chngvisibility,
@@ -79,30 +80,22 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ),
                             Container(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    "Henüz üye değil misin?",
-                                    textAlign: TextAlign.right,
-                                  ),
-                                  TextButton(
-                                    onPressed: () => Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => SignupPage(),
-                                        )),
-                                    child: Text(
-                                      "Tıkla Üye ol!",
-                                      textAlign: TextAlign.right,
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  )
-                                ],
+                              margin: EdgeInsets.symmetric(
+                                  vertical:
+                                      8.0), // Aralık eklemek için margin kullanıyoruz
+                              child: TextFormField(
+                                keyboardType: TextInputType.number,
+                                maxLength: 11,
+                                decoration: InputDecoration(
+                                    hintText: "Telefon numarası",
+                                    hintStyle: TextStyle(
+                                        fontWeight: FontWeight.normal),
+                                    prefixIcon: Icon(Icons.phone)),
                               ),
                             ),
                             Container(
                               margin: EdgeInsets.symmetric(vertical: 8.0),
+                              alignment: Alignment.centerRight,
                               child: TextButton(
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.green,
@@ -111,14 +104,10 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                 ),
                                 onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => MainPage(),
-                                      ));
+                                  Navigator.pop(context);
                                 },
                                 child: Text(
-                                  'Giriş yap',
+                                  'Kayıt ol',
                                   style: TextStyle(
                                     color: Colors.black,
                                   ),
