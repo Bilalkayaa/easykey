@@ -2,6 +2,14 @@ import 'package:easykey/screens/login_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } catch (error) {
+    print("Firebase Initialization Error: $error");
+  }
   runApp(const MyApp());
 }
 
