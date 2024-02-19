@@ -1,6 +1,7 @@
-import 'package:easykey/screens/main_page.dart';
 import 'package:easykey/screens/signup_page.dart';
 import 'package:flutter/material.dart';
+
+import '../services/firebase_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -17,6 +18,11 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
+  final AuthService _auth = AuthService();
+  // final FirebaseAuth _auth = FirebaseAuth.instance;
+  bool _isLoading = false;
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,6 +62,8 @@ class _LoginPageState extends State<LoginPage> {
                                   vertical:
                                       8.0), // Aralık eklemek için margin kullanıyoruz
                               child: TextFormField(
+                                controller: emailController,
+                                keyboardType: TextInputType.emailAddress,
                                 decoration: InputDecoration(
                                     labelText: "Kullanıcı adı",
                                     hintText: "",
@@ -66,6 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                               margin: EdgeInsets.symmetric(vertical: 8.0),
                               child: TextFormField(
                                 obscureText: isHidden,
+                                controller: passwordController,
                                 decoration: InputDecoration(
                                   labelText: "Şifre",
                                   hintText: "",
@@ -87,6 +96,16 @@ class _LoginPageState extends State<LoginPage> {
                                     textAlign: TextAlign.right,
                                   ),
                                   TextButton(
+                                    // onPressed: () => _auth.signUp(context,
+                                    //     email: emailController.text,
+                                    //     password: passwordController.text,
+                                    //     PhoneNumber: "asdasda",
+                                    //     TCKN: "tckno4321",
+                                    //     name: "bilal",
+                                    //     surname: "kaya",
+                                    //     Birthdate: "232321",
+                                    //     SerialNumber: "321",
+                                    //     ValidUntil: "2312"),
                                     onPressed: () => Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -110,19 +129,28 @@ class _LoginPageState extends State<LoginPage> {
                                     borderRadius: BorderRadius.circular(20.0),
                                   ),
                                 ),
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => MainPage(),
-                                      ));
+                                onPressed: () async {
+                                  setState(() {
+                                    _isLoading =
+                                        true; // İşlem başladığında bekleme animasyonunu göster
+                                  });
+                                  await _auth.signIn(context,
+                                      email: emailController.text,
+                                      password: passwordController
+                                          .text); // Giriş işlemini yap
+                                  setState(() {
+                                    _isLoading =
+                                        false; // İşlem tamamlandığında bekleme animasyonunu kaldır
+                                  });
                                 },
-                                child: Text(
-                                  'Giriş yap',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                  ),
-                                ),
+                                child: _isLoading
+                                    ? CircularProgressIndicator()
+                                    : Text(
+                                        'Giriş yap',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                        ),
+                                      ),
                               ),
                             ),
                           ],
