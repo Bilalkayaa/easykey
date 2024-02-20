@@ -6,6 +6,8 @@ import 'package:easykey/screens/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import '../Custom/custom_color.dart';
+
 class OnBoarding extends StatefulWidget {
   const OnBoarding({super.key});
 
@@ -53,7 +55,7 @@ class _OnBoardingState extends State<OnBoarding> {
                   controller: _controller,
                   count: 4,
                   effect: SwapEffect(
-                    activeDotColor: Colors.green.shade800,
+                    activeDotColor: CustomColors.secondaryColor,
                     type: SwapType.yRotation,
                     dotHeight: 15.0,
                     dotWidth: 15.0,

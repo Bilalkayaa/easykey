@@ -2,6 +2,7 @@ import 'package:easykey/screens/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../Custom/custom_color.dart';
 import '../controllers/extract_data_controller.dart';
 import '../services/firebase_service.dart';
 
@@ -26,7 +27,7 @@ class IdDetailPage extends StatelessWidget {
   TextStyle userInfoStyle = const TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w500,
-    color: Colors.green,
+    color: CustomColors.primaryColor,
   );
 
   bool flagvisible = true;
@@ -45,7 +46,7 @@ class IdDetailPage extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height * 0.06,
               child: Card(
-                color: Colors.green,
+                color: CustomColors.primaryColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(6.0),
                 ),
@@ -225,10 +226,10 @@ class IdDetailPage extends StatelessWidget {
               children: [
                 ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
+                        backgroundColor: CustomColors.primaryColor,
                         shape: const CircleBorder(),
                         elevation: 4,
-                        shadowColor: Colors.green,
+                        shadowColor: CustomColors.primaryColor,
                         minimumSize: Size.fromRadius(24)),
                     onPressed: () {
                       Get.back();
@@ -242,7 +243,7 @@ class IdDetailPage extends StatelessWidget {
                         margin: EdgeInsets.symmetric(vertical: 8.0),
                         child: TextButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green,
+                            backgroundColor: CustomColors.primaryColor,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20.0),
                             ),

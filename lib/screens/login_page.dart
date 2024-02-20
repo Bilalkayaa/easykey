@@ -1,3 +1,4 @@
+import 'package:easykey/Custom/custom_color.dart';
 import 'package:easykey/screens/signup_page.dart';
 import 'package:flutter/material.dart';
 
@@ -34,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Container(
                 width: double.infinity,
                 decoration: const BoxDecoration(
-                    color: Colors.green,
+                    color: CustomColors.primaryColor,
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(120),
                     )),
@@ -96,16 +97,6 @@ class _LoginPageState extends State<LoginPage> {
                                     textAlign: TextAlign.right,
                                   ),
                                   TextButton(
-                                    // onPressed: () => _auth.signUp(context,
-                                    //     email: emailController.text,
-                                    //     password: passwordController.text,
-                                    //     PhoneNumber: "asdasda",
-                                    //     TCKN: "tckno4321",
-                                    //     name: "bilal",
-                                    //     surname: "kaya",
-                                    //     Birthdate: "232321",
-                                    //     SerialNumber: "321",
-                                    //     ValidUntil: "2312"),
                                     onPressed: () => Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -114,7 +105,9 @@ class _LoginPageState extends State<LoginPage> {
                                     child: Text(
                                       "Tıkla Üye ol!",
                                       textAlign: TextAlign.right,
-                                      style: TextStyle(color: Colors.white),
+                                      style: TextStyle(
+                                        color: CustomColors.secondaryColor,
+                                      ),
                                     ),
                                   )
                                 ],
@@ -124,7 +117,7 @@ class _LoginPageState extends State<LoginPage> {
                               margin: EdgeInsets.symmetric(vertical: 8.0),
                               child: TextButton(
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.green,
+                                  backgroundColor: Colors.transparent,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20.0),
                                   ),
@@ -144,7 +137,9 @@ class _LoginPageState extends State<LoginPage> {
                                   });
                                 },
                                 child: _isLoading
-                                    ? CircularProgressIndicator()
+                                    ? CircularProgressIndicator(
+                                        color: CustomColors.secondaryColor,
+                                      )
                                     : Text(
                                         'Giriş yap',
                                         style: TextStyle(

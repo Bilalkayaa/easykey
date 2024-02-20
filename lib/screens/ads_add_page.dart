@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../Custom/custom_color.dart';
 import '../services/firebase_service.dart';
 
 class addAdd extends StatefulWidget {
@@ -33,7 +34,7 @@ class _addAddState extends State<addAdd> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green,
+      backgroundColor: CustomColors.primaryColor,
       body: SingleChildScrollView(
         child: Column(children: [
           Padding(

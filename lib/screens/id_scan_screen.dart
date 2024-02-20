@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
+import '../Custom/custom_color.dart';
 import '../controllers/extract_data_controller.dart';
 import 'id_detail_screen.dart';
 
@@ -51,7 +52,7 @@ class _idScanState extends State<idScan> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        backgroundColor: CustomColors.primaryColor,
         title: Container(
           child: Text(
             "Kimlik Tarama",
@@ -140,7 +141,8 @@ class _idScanState extends State<idScan> {
                       child: ElevatedButton(
                           style: ButtonStyle(
                               backgroundColor: MaterialStateColor.resolveWith(
-                                  (states) => Colors.green),
+                                (states) => CustomColors.primaryColor,
+                              ),
                               shape: MaterialStateProperty.all<
                                       RoundedRectangleBorder>(
                                   const RoundedRectangleBorder(
@@ -170,7 +172,8 @@ class _idScanState extends State<idScan> {
                                 style: ButtonStyle(
                                     backgroundColor:
                                         MaterialStateColor.resolveWith(
-                                            (states) => Colors.green),
+                                      (states) => CustomColors.primaryColor,
+                                    ),
                                     shape: MaterialStateProperty.all<
                                             RoundedRectangleBorder>(
                                         const RoundedRectangleBorder(

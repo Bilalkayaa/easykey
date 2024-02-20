@@ -1,3 +1,4 @@
+import 'package:easykey/Custom/custom_color.dart';
 import 'package:easykey/screens/id_scan_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -31,7 +32,7 @@ class _SignupPageState extends State<SignupPage> {
               child: Container(
                 width: double.infinity,
                 decoration: const BoxDecoration(
-                    color: Colors.green,
+                    color: CustomColors.primaryColor,
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(120),
                     )),

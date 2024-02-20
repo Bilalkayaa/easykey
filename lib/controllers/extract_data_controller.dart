@@ -8,6 +8,8 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../Custom/custom_color.dart';
+
 class ExtractDataController extends GetxController {
   RxList<String> imagePaths = <String>[].obs;
   RxString imagePath = "".obs;
@@ -232,40 +234,18 @@ class ExtractDataController extends GetxController {
             "Kimlik kartı fotoğrafından bazı veriler alınamadı. Lütfen fotoğraf kalitesini kontrol edip tekrar deneyin...",
             backgroundColor: Colors.red, colorText: Colors.white);
         // flagvisible = true;
-        // Get.to(IdDetailPage(), arguments: flagvisible);
-        // User user = User(
-        //     idBirthdate: idBirthdate.value,
-        //     idName: idName.value,
-        //     idSerialNumber: idSerialNumber.value,
-        //     idSurname: idSurname.value,
-        //     idTCKN: idTCKN.value);
-
-        // ekle(user);
       } else {
         // flagvisible = true;
 
-        // Get.to(IdDetailPage(), arguments: flagvisible);
         Get.snackbar(
           'Başarılı',
           'Veriler kimlik kartı fotoğrafından başarıyla alındı.',
-          backgroundColor: Colors.green,
+          backgroundColor: CustomColors.primaryColor,
           colorText: Colors.white,
         );
-        // User user = User(
-        //     idBirthdate: idBirthdate.value,
-        //     idName: idName.value,
-        //     idSerialNumber: idSerialNumber.value,
-        //     idSurname: idSurname.value,
-        //     idTCKN: idTCKN.value);
-        // ekle(user);
       }
     }
   }
-
-  // Future<void> ekle(User user) async {
-  //   FirebaseService firebaseService = FirebaseService();
-  //   await firebaseService.kullaniciEkle(user);
-  // }
 
   // Find barcode in the picture, if picture contains a barcode, then it is a back side.
   Future<String?> scanFile() async {

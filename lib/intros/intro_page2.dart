@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
+import '../Custom/custom_color.dart';
+
 class IntroPage2 extends StatefulWidget {
   @override
   _IntroPage2State createState() => _IntroPage2State();
@@ -10,7 +12,7 @@ class _IntroPage2State extends State<IntroPage2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green.shade400,
+      backgroundColor: CustomColors.primaryColor,
       body: Padding(
         padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 150.0),
         child: Column(
