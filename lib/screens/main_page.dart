@@ -1,13 +1,11 @@
-import 'dart:io';
-
 import 'package:easykey/screens/ads_add_page.dart';
 import 'package:easykey/screens/advertisement_page.dart';
 import 'package:easykey/screens/myads_page.dart';
 import 'package:easykey/screens/profile_page.dart';
 import 'package:easykey/services/firebase_service.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+//import 'package:image_picker/image_picker.dart';
+//import 'package:firebase_storage/firebase_storage.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key, required this.uid, required this.userData});

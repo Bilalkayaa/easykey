@@ -1,8 +1,7 @@
-import 'package:easykey/screens/login_page.dart';
+import 'package:easykey/screens/OnBoarding.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -28,7 +27,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: true,
       ),
-      home: LoginPage(),
+      home: OnBoarding(),
     );
   }
 }
