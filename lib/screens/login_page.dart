@@ -106,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                                       "Tıkla Üye ol!",
                                       textAlign: TextAlign.right,
                                       style: TextStyle(
-                                        color: CustomColors.secondaryColor,
+                                        color: Colors.blue,
                                       ),
                                     ),
                                   )

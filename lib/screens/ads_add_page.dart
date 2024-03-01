@@ -130,29 +130,35 @@ class _addAddState extends State<addAdd> {
                           ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    ElevatedButton(
-                      onPressed: () async {
-                        selectedImages.clear();
-                        setState(() {});
-                      },
-                      child: Text(
-                        "fotoğrafları temizle",
-                        style: TextStyle(color: Colors.red),
+                    Expanded(
+                      flex: 1,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          selectedImages.clear();
+                          setState(() {});
+                        },
+                        child: Text(
+                          "Fotoğrafları Temizle",
+                          style: TextStyle(color: Colors.red),
+                        ),
                       ),
                     ),
-                    ElevatedButton(
-                      onPressed: () async {
-                        // selectedImages.clear();
+                    Expanded(
+                      flex: 1,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          // selectedImages.clear();
 
-                        getImages();
+                          getImages();
 
-                        setState(() {
-                          flagphoto = true;
-                        });
-                      },
-                      child: Text("fotoğraf seç"),
+                          setState(() {
+                            flagphoto = true;
+                          });
+                        },
+                        child: Text("Fotoğraf Seç"),
+                      ),
                     ),
                   ],
                 ),
@@ -173,8 +179,10 @@ class _addAddState extends State<addAdd> {
                       }
                     },
                     child: uploading
-                        ? CircularProgressIndicator()
-                        : Text("İlan ver"))
+                        ? CircularProgressIndicator(
+                            color: CustomColors.secondaryColor,
+                          )
+                        : Text("İlan Ver"))
               ],
             ),
           ),
@@ -234,7 +242,13 @@ class _addAddState extends State<addAdd> {
       uploading = false;
       selectedImages.clear();
       _imageUrls.clear();
+      advertTitle.clear();
+      advertDescription.clear();
+      advertPrice.clear();
+      Address.clear();
       Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('İlanınız başarıyla oluşturuldu')));
     });
   }
 }

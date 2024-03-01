@@ -1,6 +1,7 @@
 import 'package:easykey/Custom/custom_color.dart';
 import 'package:easykey/screens/ads_add_page.dart';
 import 'package:easykey/screens/advertisement_page.dart';
+import 'package:easykey/screens/favorites_page.dart';
 import 'package:easykey/screens/myads_page.dart';
 import 'package:easykey/screens/profile_page.dart';
 import 'package:flutter/material.dart';
@@ -52,9 +53,9 @@ class _MainPageState extends State<MainPage> {
           backgroundColor: CustomColors.primaryColor,
         ),
         body: TabBarView(children: [
-          advertPage(),
-          Container(),
-          myAdsPage(id: widget.uid),
+          advertPage(userData: widget.userData),
+          FavoritesPage(userData: widget.userData),
+          myAdsPage(id: widget.uid, userData: widget.userData),
           profilePage(uid: widget.uid, userData: widget.userData)
         ]),
         bottomNavigationBar: BottomAppBar(

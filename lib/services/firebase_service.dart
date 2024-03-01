@@ -103,7 +103,8 @@ class AuthService {
         "SerialNumber": SerialNumber,
         "ValidUntil": ValidUntil,
         "PhoneNumber": PhoneNumber,
-        "id": uid
+        "id": uid,
+        "Favs": []
       });
     } catch (e) {
       // Kayıt işlemi sırasında oluşabilecek hataları ele alın

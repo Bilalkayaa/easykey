@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import '../classes/ads.dart';
 
 class advertPage extends StatefulWidget {
-  const advertPage({super.key});
+  const advertPage({super.key, required this.userData});
+  final userData;
 
   @override
   State<advertPage> createState() => _advertPageState();
@@ -25,7 +26,10 @@ class _advertPageState extends State<advertPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('ads').snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('ads')
+            .orderBy('Date', descending: true)
+            .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return CircularProgressIndicator();
@@ -54,7 +58,10 @@ class _advertPageState extends State<advertPage> {
                           controller: scrollController,
                           itemBuilder: (context, index) {
                             ads ad = adsList[index];
+
                             return Card(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16)),
                               margin: EdgeInsets.all(5),
                               child: ListTile(
                                 onTap: () => Navigator.push(
@@ -62,19 +69,25 @@ class _advertPageState extends State<advertPage> {
                                     MaterialPageRoute(
                                         builder: (context) => adDetail(
                                               ad: ad,
+                                              userData: widget.userData,
                                             ))),
                                 contentPadding: EdgeInsets.all(0),
                                 title: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Image.network(
-                                      ad.images.isNotEmpty ? ad.images[0] : '',
-                                      width: double
-                                          .infinity, // Resmi genişliği ekrana sığacak şekilde ayarla
-                                      height:
-                                          200, // Resmin yüksekliğini ayarla (isteğe bağlı)
-                                      fit: BoxFit
-                                          .cover, // Resmi uygun şekilde boyutlandır
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(16),
+                                      child: Image.network(
+                                        ad.images.isNotEmpty
+                                            ? ad.images[0]
+                                            : '',
+                                        width: double
+                                            .infinity, // Resmi genişliği ekrana sığacak şekilde ayarla
+                                        height:
+                                            200, // Resmin yüksekliğini ayarla (isteğe bağlı)
+                                        fit: BoxFit
+                                            .cover, // Resmi uygun şekilde boyutlandır
+                                      ),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.all(8),
@@ -82,44 +95,23 @@ class _advertPageState extends State<advertPage> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                "${ad.title}",
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ],
+                                          ),
                                           Text(
                                             "${ad.price} TL",
                                             style: TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                            ad.title ?? "",
-                                            style: TextStyle(
                                                 fontWeight: FontWeight.normal),
                                           ),
-                                          Row(
-                                            children: [
-                                              Expanded(
-                                                child: ElevatedButton(
-                                                  onPressed: () {},
-                                                  child: Text("Ara"),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                  width:
-                                                      5), // Butonlar arası boşluk
-                                              Expanded(
-                                                child: ElevatedButton(
-                                                  onPressed: () {},
-                                                  child: Text("Mesaj"),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                  width:
-                                                      5), // Butonlar arası boşluk
-                                              Expanded(
-                                                child: ElevatedButton(
-                                                  onPressed: () {},
-                                                  child: Text("Whatsapp"),
-                                                ),
-                                              ),
-                                            ],
-                                          )
                                         ],
                                       ),
                                     )
@@ -130,7 +122,6 @@ class _advertPageState extends State<advertPage> {
                           },
                         ),
                 ),
-                SizedBox(height: 80),
               ],
             );
           }

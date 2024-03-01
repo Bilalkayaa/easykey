@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 import '../classes/ads.dart';
 
 class myAdsPage extends StatefulWidget {
-  const myAdsPage({super.key, required this.id});
+  const myAdsPage({super.key, required this.id, required this.userData});
   final String id;
+  final userData;
   @override
   State<myAdsPage> createState() => _myAdsPageState();
 }
@@ -58,75 +59,89 @@ class _myAdsPageState extends State<myAdsPage> {
                           itemBuilder: (context, index) {
                             ads ad = adsList[index];
                             return Card(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16)),
                               margin: EdgeInsets.all(5),
-                              child: ListTile(
-                                onTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => adDetail(
-                                              ad: ad,
-                                            ))),
-                                contentPadding: EdgeInsets.all(0),
-                                title: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Image.network(
-                                      ad.images.isNotEmpty ? ad.images[0] : '',
-                                      width: double
-                                          .infinity, // Resmi genişliği ekrana sığacak şekilde ayarla
-                                      height:
-                                          200, // Resmin yüksekliğini ayarla (isteğe bağlı)
-                                      fit: BoxFit
-                                          .cover, // Resmi uygun şekilde boyutlandır
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.all(8),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "${ad.price} TL",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold),
+                              child: InkWell(
+                                onLongPress: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text("Uyarı"),
+                                        content: Text(
+                                            "Bu ilanı silmek istediğinize emin misiniz?"),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context)
+                                                  .pop(); // Dialogu kapat
+                                            },
+                                            child: Text("Hayır"),
                                           ),
-                                          Text(
-                                            ad.title ?? "",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.normal),
+                                          TextButton(
+                                            onPressed: () {
+                                              // Firebase'den ilanı silme işlemi
+                                              deleteAd(ad.aid ?? "");
+                                              Navigator.of(context)
+                                                  .pop(); // Dialogu kapat
+                                            },
+                                            child: Text("Evet"),
                                           ),
-                                          Row(
-                                            children: [
-                                              Expanded(
-                                                child: ElevatedButton(
-                                                  onPressed: () {},
-                                                  child: Text("Ara"),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                  width:
-                                                      5), // Butonlar arası boşluk
-                                              Expanded(
-                                                child: ElevatedButton(
-                                                  onPressed: () {},
-                                                  child: Text("Mesaj"),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                  width:
-                                                      5), // Butonlar arası boşluk
-                                              Expanded(
-                                                child: ElevatedButton(
-                                                  onPressed: () {},
-                                                  child: Text("Whatsapp"),
-                                                ),
-                                              ),
-                                            ],
-                                          )
                                         ],
+                                      );
+                                    },
+                                  );
+                                },
+                                child: ListTile(
+                                  onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => adDetail(
+                                                ad: ad,
+                                                userData: widget.userData,
+                                              ))),
+                                  contentPadding: EdgeInsets.all(0),
+                                  title: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(16),
+                                        child: Image.network(
+                                          ad.images.isNotEmpty
+                                              ? ad.images[0]
+                                              : '',
+                                          width: double
+                                              .infinity, // Resmi genişliği ekrana sığacak şekilde ayarla
+                                          height:
+                                              200, // Resmin yüksekliğini ayarla (isteğe bağlı)
+                                          fit: BoxFit
+                                              .cover, // Resmi uygun şekilde boyutlandır
+                                        ),
                                       ),
-                                    )
-                                  ],
+                                      Padding(
+                                        padding: EdgeInsets.all(8),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "${ad.title}",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              ad.price ?? "",
+                                              style: TextStyle(
+                                                  fontWeight:
+                                                      FontWeight.normal),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             );
@@ -140,5 +155,14 @@ class _myAdsPageState extends State<myAdsPage> {
         },
       ),
     );
+  }
+
+  void deleteAd(String adId) {
+    FirebaseFirestore.instance
+        .collection('ads')
+        .doc(adId)
+        .delete()
+        .then((value) => print('İlan silindi'))
+        .catchError((error) => print('Hata: $error'));
   }
 }

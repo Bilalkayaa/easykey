@@ -9,6 +9,7 @@ class User {
   String? Password;
   String uid;
   String? PhoneNumber;
+  List<String> favs;
 
   User(
       {this.SerialNumber,
@@ -20,7 +21,8 @@ class User {
       this.Email,
       this.Password,
       required this.uid,
-      this.PhoneNumber});
+      this.PhoneNumber,
+      required this.favs});
 
   Map<String, dynamic> toMap() {
     return {
@@ -33,6 +35,7 @@ class User {
       'Email': Email,
       'Password': Password,
       'PhoneNumber': PhoneNumber,
+      'Favs': favs
     };
   }
 
@@ -48,6 +51,7 @@ class User {
       Password: map['Password'],
       uid: map['id'],
       PhoneNumber: map['PhoneNumber'],
+      favs: List<String>.from(map['Favs'] ?? []),
     );
   }
 }
