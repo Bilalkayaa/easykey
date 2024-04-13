@@ -29,6 +29,7 @@ class _MainPageState extends State<MainPage> {
     return DefaultTabController(
       length: 4,
       child: Scaffold(
+        extendBodyBehindAppBar: true,
         extendBody: true,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: FloatingActionButton(
@@ -46,8 +47,8 @@ class _MainPageState extends State<MainPage> {
         appBar: AppBar(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(20))),
+                  bottomLeft: Radius.circular(32),
+                  bottomRight: Radius.circular(32))),
           automaticallyImplyLeading: false,
           title: Text("EasyKey"),
           backgroundColor: CustomColors.primaryColor,
@@ -65,8 +66,8 @@ class _MainPageState extends State<MainPage> {
           notchMargin: 5,
           shape: CircularNotchedRectangle(),
           child: TabBar(
-              unselectedLabelColor: CustomColors.secondaryColor,
-              labelColor: Colors.lightBlueAccent,
+              unselectedLabelColor: Colors.white,
+              labelColor: CustomColors.secondaryColor,
               indicator: BoxDecoration(),
               tabs: [
                 Tab(

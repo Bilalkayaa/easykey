@@ -1,12 +1,14 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easykey/services/firebase_post_service.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../Custom/custom_color.dart';
-import '../services/firebase_service.dart';
+import '../services/firebase_auth_service.dart';
 
 class addAdd extends StatefulWidget {
   const addAdd({super.key, required this.userData});
@@ -20,6 +22,7 @@ bool flagphoto = false;
 bool uploading = false;
 List<File> selectedImages = [];
 final picker = ImagePicker();
+
 TextEditingController advertTitle = TextEditingController();
 
 TextEditingController advertDescription = TextEditingController();
@@ -28,9 +31,21 @@ TextEditingController Address = TextEditingController();
 
 TextEditingController advertPrice = TextEditingController();
 
-AuthService _auth = AuthService();
+Postservice _post = Postservice();
 
 class _addAddState extends State<addAdd> {
+  @override
+  void dispose() {
+    uploading = false;
+    selectedImages.clear();
+    _imageUrls.clear();
+    advertTitle.clear();
+    advertDescription.clear();
+    advertPrice.clear();
+    Address.clear();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,47 +53,69 @@ class _addAddState extends State<addAdd> {
       body: SingleChildScrollView(
         child: Column(children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
                 SizedBox(
                   height: 30,
                 ),
                 Text(
-                  "İlan başlığı",
+                  "İLAN BAŞLIĞI",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
+                SizedBox(
+                  height: 10,
+                ),
                 TextFormField(
+                  decoration: customInputDecoration(),
                   controller: advertTitle,
                   maxLength: 50,
                   minLines: 1,
                   maxLines: 2,
                 ),
                 Text(
-                  "İlan açıklaması",
+                  "İLAN AÇIKLAMASI",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
+                SizedBox(
+                  height: 10,
+                ),
                 TextFormField(
+                  decoration: customInputDecoration(),
                   controller: advertDescription,
                   maxLength: 500,
-                  minLines: 1,
+                  minLines: 3,
                   maxLines: 6,
                 ),
+                SizedBox(
+                  height: 10,
+                ),
                 Text(
-                  "Adres",
+                  "ADRES",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
+                SizedBox(
+                  height: 10,
+                ),
                 TextFormField(
+                  decoration: customInputDecoration(),
                   controller: Address,
                   maxLength: 500,
                   minLines: 1,
                   maxLines: 6,
                 ),
+                SizedBox(
+                  height: 10,
+                ),
                 Text(
-                  "Fiyat",
+                  "FİYAT",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
+                SizedBox(
+                  height: 10,
+                ),
                 TextFormField(
+                  decoration: customInputDecoration(flag: true),
                   controller: advertPrice,
                   maxLength: 50,
                   minLines: 1,
@@ -89,6 +126,7 @@ class _addAddState extends State<addAdd> {
                         child: Text(
                           "Eklenecek Fotoğrafları seçin!",
                           style: TextStyle(fontSize: 30),
+                          textAlign: TextAlign.center,
                         ),
                       )
                     : selectedImages.length > 10
@@ -101,6 +139,11 @@ class _addAddState extends State<addAdd> {
                         : Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
+                              Text(
+                                "FOTOĞRAFLAR",
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
                               Flexible(
                                 fit: FlexFit.loose,
                                 flex: 1,
@@ -116,8 +159,9 @@ class _addAddState extends State<addAdd> {
                                       (BuildContext context, int index) {
                                     return Container(
                                       decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.red)),
+                                          border: Border.all(
+                                              color:
+                                                  CustomColors.secondaryColor)),
                                       child: kIsWeb
                                           ? Image.network(
                                               selectedImages[index].path)
@@ -130,35 +174,29 @@ class _addAddState extends State<addAdd> {
                           ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Expanded(
-                      flex: 1,
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          selectedImages.clear();
-                          setState(() {});
-                        },
-                        child: Text(
-                          "Fotoğrafları Temizle",
-                          style: TextStyle(color: Colors.red),
-                        ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        selectedImages.clear();
+                        setState(() {});
+                      },
+                      child: Text(
+                        "Fotoğrafları Temizle!",
+                        style: TextStyle(color: Colors.red),
                       ),
                     ),
-                    Expanded(
-                      flex: 1,
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          // selectedImages.clear();
+                    ElevatedButton(
+                      onPressed: () async {
+                        // selectedImages.clear();
 
-                          getImages();
+                        getImages();
 
-                          setState(() {
-                            flagphoto = true;
-                          });
-                        },
-                        child: Text("Fotoğraf Seç"),
-                      ),
+                        setState(() {
+                          flagphoto = true;
+                        });
+                      },
+                      child: Text("Fotoğraf Seç"),
                     ),
                   ],
                 ),
@@ -168,7 +206,8 @@ class _addAddState extends State<addAdd> {
                           advertDescription.text != "" &&
                           advertTitle.text != "" &&
                           Address.text != "" &&
-                          advertPrice.text != "") {
+                          advertPrice.text != "" &&
+                          isNumeric(advertPrice.text)) {
                         _uploadAds(Address.text, advertTitle.text,
                             advertDescription.text, advertPrice.text);
                       } else {
@@ -189,6 +228,27 @@ class _addAddState extends State<addAdd> {
         ]),
       ),
     );
+  }
+
+  bool isNumeric(String str) {
+    for (var i = 0; i < str.length; i++) {
+      if (str.codeUnitAt(i) < 48 || str.codeUnitAt(i) > 57) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  InputDecoration customInputDecoration({bool flag = false}) {
+    return InputDecoration(
+        suffixText: flag ? "\u20BA" : "",
+        suffixStyle:
+            TextStyle(color: CustomColors.secondaryColor, fontSize: 20),
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: CustomColors.secondaryColor)),
+        focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: CustomColors.secondaryColor)));
   }
 
   Future getImages() async {
@@ -215,10 +275,7 @@ class _addAddState extends State<addAdd> {
     setState(() {
       uploading = true;
     });
-    DateTime now = DateTime.now();
-    String month = now.month.toString().padLeft(2, '0');
-    String date = '${now.day}.${month}.${now.year}';
-    String hour = '${now.hour}:${now.minute}:${now.second}';
+    final Timestamp timestamp = Timestamp.now();
 
     for (var image in selectedImages) {
       String fileName = DateTime.now().millisecondsSinceEpoch.toString();
@@ -229,11 +286,10 @@ class _addAddState extends State<addAdd> {
       String downloadUrl = await snapshot.ref.getDownloadURL();
       _imageUrls.add(downloadUrl);
     }
-    await _auth.registerAds(
+    await _post.registerAds(
         images: _imageUrls,
         uid: widget.userData['id'],
-        date: date,
-        hour: hour,
+        timestamp: timestamp,
         address: address,
         description: description,
         title: title,

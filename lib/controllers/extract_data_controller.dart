@@ -64,186 +64,185 @@ class ExtractDataController extends GetxController {
 
   Future<void> processImage() async {
     final InputImage inputImage;
-    if (imagePath.value != null) {
-      inputImage = InputImage.fromFilePath(imagePath.value);
-      TextRecognizer textRecognizer =
-          TextRecognizer(script: TextRecognitionScript.latin);
-      final RecognizedText recognizedText =
-          await textRecognizer.processImage(inputImage);
-      String text = recognizedText.text;
-      List<String> lines = text.split('\n');
+    inputImage = InputImage.fromFilePath(imagePath.value);
+    TextRecognizer textRecognizer =
+        TextRecognizer(script: TextRecognitionScript.latin);
+    final RecognizedText recognizedText =
+        await textRecognizer.processImage(inputImage);
+    String text = recognizedText.text;
+    List<String> lines = text.split('\n');
 
-      bool isSerial = false;
-      bool isBirthDate = false;
-      bool isValidUntil = false;
-      bool isTCKN = false;
-      bool isName = false;
-      bool isSurname = false;
-      int counter = 0;
+    bool isSerial = false;
+    bool isBirthDate = false;
+    bool isValidUntil = false;
+    bool isTCKN = false;
+    bool isName = false;
+    bool isSurname = false;
+    int counter = 0;
 
-      for (var line in lines) {
-        print("line : $line");
-        if (isSerial) {
-          if (line.startsWith('A') && line.length == 9) {
-            idSerialNumber.value = line;
-            if (line[3] == '1')
-              idSerialNumber.value =
-                  idSerialNumber.value.replaceRange(3, 4, 'I');
-            if (line[3] == '0')
-              idSerialNumber.value =
-                  idSerialNumber.value.replaceRange(3, 4, 'O');
+    for (var line in lines) {
+      print("line : $line");
+      if (isSerial) {
+        if (line.startsWith('A') && line.length == 9) {
+          idSerialNumber.value = line;
+          if (line[3] == '1')
+            idSerialNumber.value = idSerialNumber.value.replaceRange(3, 4, 'I');
+          if (line[3] == '0')
+            idSerialNumber.value = idSerialNumber.value.replaceRange(3, 4, 'O');
 
-            print("CONTROL: Serial Number $idSerialNumber");
-          } else {
-            //  Get.snackbar("Hata", "Seri Numarası Net Değil! Lütfen Tekrar Deneyin...");
-            break;
-          }
-          isSerial = false;
+          print("CONTROL: Serial Number $idSerialNumber");
+        } else {
+          //  Get.snackbar("Hata", "Seri Numarası Net Değil! Lütfen Tekrar Deneyin...");
+          break;
         }
-        if (isBirthDate) {
-          if (double.tryParse(line[0]) != null &&
-              double.tryParse(line[2]) == null &&
-              dateRegex.hasMatch(line)) {
-            idBirthdate.value = line;
-            print("CONTROL: BIRTH DATE $line");
-          } else {
-            //  Get.snackbar("Hata", "Doğum Tarihi Net Değil! Lütfen Tekrar Deneyin...");
-
-            break;
-          }
-          isBirthDate = false;
-        }
-        if (isValidUntil) {
-          if (double.tryParse(line[0]) != null &&
-              double.tryParse(line[2]) == null &&
-              dateRegex.hasMatch(line)) {
-            idValidUntil.value = line;
-            print("CONTROL: VALID UNTIL:  $line");
-          } else {
-            //   Get.snackbar("Hata", "Son Geçerlilik Tarihi Net Değil! Lütfen Tekrar Deneyin...");
-
-            break;
-          }
-
-          isValidUntil = false;
-        }
-
-        //! !
-        if (isTCKN) {
-          if (true) {
-            idTCKN.value = line;
-            print("CONTROL: TCKN:  $line");
-          } else {
-            //   Get.snackbar("Hata", "Son Geçerlilik Tarihi Net Değil! Lütfen Tekrar Deneyin...");
-            break;
-          }
-
-          isTCKN = false;
-        }
-        if (isName) {
-          if (true) {
-            idName.value = line;
-            print("CONTROL: NAME:  $line");
-          } else {
-            //   Get.snackbar("Hata", "Son Geçerlilik Tarihi Net Değil! Lütfen Tekrar Deneyin...");
-
-            break;
-          }
-
-          isName = false;
-        }
-        if (isSurname) {
-          if (true) {
-            idSurname.value = line;
-            print("CONTROL: SURNAME:  $line");
-          } else {
-            //   Get.snackbar("Hata", "Son Geçerlilik Tarihi Net Değil! Lütfen Tekrar Deneyin...");
-
-            break;
-          }
-
-          isSurname = false;
-        }
-
-        if (line.contains("Birth") ||
-            line.contains("Date") ||
-            line.contains("Doğum") ||
-            line.contains("Tarihi") ||
-            line.contains("Tarini") ||
-            line.contains("Tartini") ||
-            line.contains("Doğu")) {
-          isBirthDate = true;
-          counter++;
-        }
-
-        if (line.contains("Seri") ||
-            line.contains("Document") ||
-            line.contains("Ser") ||
-            line.contains("Doc")) {
-          isSerial = true;
-          counter++;
-        }
-
-        if (line.contains("Son") ||
-            line.contains("Geçerlilik") ||
-            line.contains("Valid") ||
-            line.contains("Until") ||
-            line.contains("Geçer") ||
-            line.contains("Valia") ||
-            line.contains("Unti") ||
-            line.contains("Geçeri") ||
-            line.contains("Geçerli")) {
-          isValidUntil = true;
-          counter++;
-        }
-        if (line.contains("Kimlik No") ||
-            line.contains("Kimlik") ||
-            line.contains("TR Identity") ||
-            line.contains("Identity No") ||
-            line.contains("Identity") ||
-            line.contains("TR") ||
-            line.contains("entity") ||
-            line.contains("ity No")) {
-          isTCKN = true;
-          counter++;
-        }
-        if (line.contains("Soyadı") ||
-            line.contains("Surname") ||
-            line.contains("Soyadi") ||
-            line.contains("urname") ||
-            line.contains("Soyad")) {
-          isSurname = true;
-          counter++;
-        }
-        if (line.contains("Adı") ||
-            line.contains("Adi") ||
-            line.contains("Given Name") ||
-            line.contains("Name(s)") ||
-            line.contains("Give") ||
-            line.contains("Name") ||
-            line.contains("Gven")) {
-          isName = true;
-          counter++;
-        }
-
-        print(line);
+        isSerial = false;
       }
-      counter = 6;
-      if (counter != 6) {
-        Get.snackbar('Hata',
-            "Kimlik kartı fotoğrafından bazı veriler alınamadı. Lütfen fotoğraf kalitesini kontrol edip tekrar deneyin...",
-            backgroundColor: Colors.red, colorText: Colors.white);
-        // flagvisible = true;
-      } else {
-        // flagvisible = true;
+      if (isBirthDate) {
+        if (double.tryParse(line[0]) != null &&
+            double.tryParse(line[2]) == null &&
+            dateRegex.hasMatch(line)) {
+          idBirthdate.value = line;
+          print("CONTROL: BIRTH DATE $line");
+        } else {
+          //  Get.snackbar("Hata", "Doğum Tarihi Net Değil! Lütfen Tekrar Deneyin...");
 
-        Get.snackbar(
-          'Başarılı',
-          'Veriler kimlik kartı fotoğrafından başarıyla alındı.',
-          backgroundColor: CustomColors.primaryColor,
-          colorText: Colors.white,
-        );
+          break;
+        }
+        isBirthDate = false;
       }
+      if (isValidUntil) {
+        if (double.tryParse(line[0]) != null &&
+            double.tryParse(line[2]) == null &&
+            dateRegex.hasMatch(line)) {
+          idValidUntil.value = line;
+          print("CONTROL: VALID UNTIL:  $line");
+        } else {
+          //   Get.snackbar("Hata", "Son Geçerlilik Tarihi Net Değil! Lütfen Tekrar Deneyin...");
+
+          break;
+        }
+
+        isValidUntil = false;
+      }
+
+      //! !
+      if (isTCKN) {
+        if (true) {
+          idTCKN.value = line;
+          print("CONTROL: TCKN:  $line");
+          // ignore: dead_code
+        } else {
+          //   Get.snackbar("Hata", "Son Geçerlilik Tarihi Net Değil! Lütfen Tekrar Deneyin...");
+          break;
+        }
+
+        isTCKN = false;
+      }
+      if (isName) {
+        if (true) {
+          idName.value = line;
+          print("CONTROL: NAME:  $line");
+          // ignore: dead_code
+        } else {
+          //   Get.snackbar("Hata", "Son Geçerlilik Tarihi Net Değil! Lütfen Tekrar Deneyin...");
+
+          break;
+        }
+
+        isName = false;
+      }
+      if (isSurname) {
+        if (true) {
+          idSurname.value = line;
+          print("CONTROL: SURNAME:  $line");
+          // ignore: dead_code
+        } else {
+          //   Get.snackbar("Hata", "Son Geçerlilik Tarihi Net Değil! Lütfen Tekrar Deneyin...");
+
+          break;
+        }
+
+        isSurname = false;
+      }
+
+      if (line.contains("Birth") ||
+          line.contains("Date") ||
+          line.contains("Doğum") ||
+          line.contains("Tarihi") ||
+          line.contains("Tarini") ||
+          line.contains("Tartini") ||
+          line.contains("Doğu")) {
+        isBirthDate = true;
+        counter++;
+      }
+
+      if (line.contains("Seri") ||
+          line.contains("Document") ||
+          line.contains("Ser") ||
+          line.contains("Doc")) {
+        isSerial = true;
+        counter++;
+      }
+
+      if (line.contains("Son") ||
+          line.contains("Geçerlilik") ||
+          line.contains("Valid") ||
+          line.contains("Until") ||
+          line.contains("Geçer") ||
+          line.contains("Valia") ||
+          line.contains("Unti") ||
+          line.contains("Geçeri") ||
+          line.contains("Geçerli")) {
+        isValidUntil = true;
+        counter++;
+      }
+      if (line.contains("Kimlik No") ||
+          line.contains("Kimlik") ||
+          line.contains("TR Identity") ||
+          line.contains("Identity No") ||
+          line.contains("Identity") ||
+          line.contains("TR") ||
+          line.contains("entity") ||
+          line.contains("ity No")) {
+        isTCKN = true;
+        counter++;
+      }
+      if (line.contains("Soyadı") ||
+          line.contains("Surname") ||
+          line.contains("Soyadi") ||
+          line.contains("urname") ||
+          line.contains("Soyad")) {
+        isSurname = true;
+        counter++;
+      }
+      if (line.contains("Adı") ||
+          line.contains("Adi") ||
+          line.contains("Given Name") ||
+          line.contains("Name(s)") ||
+          line.contains("Give") ||
+          line.contains("Name") ||
+          line.contains("Gven")) {
+        isName = true;
+        counter++;
+      }
+
+      print(line);
+    }
+    counter = 6;
+    if (counter != 6) {
+      Get.snackbar('Hata',
+          "Kimlik kartı fotoğrafından bazı veriler alınamadı. Lütfen fotoğraf kalitesini kontrol edip tekrar deneyin...",
+          backgroundColor: Colors.red, colorText: Colors.white);
+      // flagvisible = true;
+    } else {
+      // flagvisible = true;
+
+      Get.snackbar(
+        'Başarılı',
+        'Veriler kimlik kartı fotoğrafından başarıyla alındı.',
+        backgroundColor: CustomColors.primaryColor,
+        colorText: Colors.white,
+      );
     }
   }
 

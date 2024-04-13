@@ -22,7 +22,9 @@ class _profilePageState extends State<profilePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: 20),
+            SizedBox(
+              height: 90,
+            ),
             Text(
               'İsim',
               style: TextStyle(

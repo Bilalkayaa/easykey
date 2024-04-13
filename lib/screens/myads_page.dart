@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easykey/screens/ad_detail.page.dart';
+import 'package:easykey/services/firebase_post_service.dart';
 import 'package:flutter/material.dart';
 
-import '../classes/ads.dart';
+import '../model/ads.dart';
 
 class myAdsPage extends StatefulWidget {
   const myAdsPage({super.key, required this.id, required this.userData});
@@ -22,6 +23,7 @@ class _myAdsPageState extends State<myAdsPage> {
     super.initState();
   }
 
+  Postservice _post = Postservice();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +55,8 @@ class _myAdsPageState extends State<myAdsPage> {
                           ),
                         )
                       : ListView.builder(
-                          padding: EdgeInsets.all(5),
+                          padding: EdgeInsets.only(
+                              left: 5, right: 5, top: 80, bottom: 75),
                           itemCount: adsList.length,
                           controller: scrollController,
                           itemBuilder: (context, index) {
@@ -82,7 +85,8 @@ class _myAdsPageState extends State<myAdsPage> {
                                           TextButton(
                                             onPressed: () {
                                               // Firebase'den ilanı silme işlemi
-                                              deleteAd(ad.aid ?? "");
+                                              _post.deleteAd(ad.aid);
+                                              _post.RemoveFromFavorites(ad.aid);
                                               Navigator.of(context)
                                                   .pop(); // Dialogu kapat
                                             },
@@ -148,21 +152,11 @@ class _myAdsPageState extends State<myAdsPage> {
                           },
                         ),
                 ),
-                SizedBox(height: 80),
               ],
             );
           }
         },
       ),
     );
-  }
-
-  void deleteAd(String adId) {
-    FirebaseFirestore.instance
-        .collection('ads')
-        .doc(adId)
-        .delete()
-        .then((value) => print('İlan silindi'))
-        .catchError((error) => print('Hata: $error'));
   }
 }

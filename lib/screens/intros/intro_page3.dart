@@ -3,12 +3,12 @@ import 'package:lottie/lottie.dart';
 
 import '../Custom/custom_color.dart';
 
-class IntroPage2 extends StatefulWidget {
+class IntroPage3 extends StatefulWidget {
   @override
-  _IntroPage2State createState() => _IntroPage2State();
+  _IntroPage3State createState() => _IntroPage3State();
 }
 
-class _IntroPage2State extends State<IntroPage2> {
+class _IntroPage3State extends State<IntroPage3> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +18,7 @@ class _IntroPage2State extends State<IntroPage2> {
         child: Column(
           children: [
             Lottie.asset(
-              'assets/searchHome.json',
+              'assets/deal2.json',
               width: 250,
               height: 250,
               fit: BoxFit.fill,
@@ -26,11 +26,12 @@ class _IntroPage2State extends State<IntroPage2> {
             SizedBox(height: 15.0),
             const Center(
               child: Text(
-                "İlgini çeken evleri inceleyebilirsin!",
+                "İstediğin an evlere ulaşma imkanı!",
                 style: TextStyle(
                   fontSize: 24.0,
                   fontWeight: FontWeight.bold,
                 ),
+                textAlign: TextAlign.center,
               ),
             ),
             const SizedBox(

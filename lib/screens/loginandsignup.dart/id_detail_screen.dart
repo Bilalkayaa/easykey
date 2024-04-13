@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 import '../Custom/custom_color.dart';
 import '../controllers/extract_data_controller.dart';
-import '../services/firebase_service.dart';
+import '../services/firebase_auth_service.dart';
 
 // ignore: must_be_immutable
 class IdDetailPage extends StatelessWidget {

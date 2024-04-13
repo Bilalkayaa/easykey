@@ -1,10 +1,12 @@
-import 'package:easykey/screens/OnBoarding.dart';
+import 'package:easykey/screens/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 import 'firebase_options.dart';
+import 'intros/OnBoarding.dart';
 
-Future<void> main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   try {
     await Firebase.initializeApp(
@@ -13,11 +15,18 @@ Future<void> main() async {
   } catch (error) {
     print("Firebase Initialization Error: $error");
   }
-  runApp(const MyApp());
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  bool? showOnboarding = prefs.getBool('showOnboarding');
+
+  runApp(MyApp(showOnboarding: showOnboarding == null));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool showOnboarding;
+
+  const MyApp({Key? key, required this.showOnboarding}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -26,7 +35,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
       ),
-      home: OnBoarding(),
+      home: showOnboarding ? OnBoarding() : LoginPage(),
     );
   }
 }

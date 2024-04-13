@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../classes/ads.dart';
-import '../classes/user.dart';
+import '../model/ads.dart';
+import '../model/user.dart';
 import 'ad_detail.page.dart';
 
 class FavoritesPage extends StatefulWidget {
@@ -49,7 +49,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
             ));
           } else {
             return ListView.builder(
-              padding: EdgeInsets.all(5),
+              padding: EdgeInsets.only(left: 5, right: 5, top: 80, bottom: 75),
               itemCount: favoriteAds.length,
               itemBuilder: (context, index) {
                 String adId = favoriteAds[index];
@@ -130,62 +130,5 @@ class _FavoritesPageState extends State<FavoritesPage> {
         },
       ),
     );
-  }
-
-  Future<void> checkFavorite(List<ads> adsList) async {
-    try {
-      // Kullanıcının belgesine erişmek için Firestore'dan belgeyi getirin
-      DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(widget.userData['id'])
-          .get();
-
-      // Kullanıcının belgesi varsa ve içeriği varsa devam edin
-      if (userSnapshot.exists && userSnapshot.data() != null) {
-        // Kullanıcı nesnesini oluşturun
-        User user = User.fromMap(userSnapshot.data() as Map<String, dynamic>);
-
-        // Kullanıcının favoriler listesini alın
-        List<String> favorites = user.favs;
-
-        // Eğer favoriler listesi varsa ve ilan ID'si listeye dahilse, ilan favorilerde bulunuyor demektir
-        adsList.asMap().forEach((index, element) {
-          // index: indeks, element: liste öğesi
-          if (favorites.contains(element.aid)) {
-            print("Index: $index, İlan favorilerde bulunuyor.");
-          } else {
-            print("Index: $index, İlan favorilerde bulunmuyor.");
-          }
-        });
-      } else {
-        print("Kullanıcı bulunamadı veya veri yok.");
-      }
-    } catch (error) {
-      print("Hata: $error");
-    }
-  }
-
-  void addToFavorites(String adId, String userId) {
-    // Firebase Firestore'daki favoriler koleksiyonuna ilan ID'sini ekleyin
-    FirebaseFirestore.instance.collection('users').doc(userId).update({
-      'favs': FieldValue.arrayUnion([adId]),
-    }).then((_) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Favorilere eklendi.')));
-    }).catchError((error) {
-      print('Hata: $error');
-    });
-  }
-
-  void removeFromFavorites(String adId, String userId) {
-    // Firebase Firestore'daki favoriler koleksiyonundan ilan ID'sini kaldırın
-    FirebaseFirestore.instance.collection('users').doc(userId).update({
-      'favs': FieldValue.arrayRemove([adId]),
-    }).then((_) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Favorilerden kaldırıldı.')));
-    }).catchError((error) {
-      print('Hata: $error');
-    });
   }
 }

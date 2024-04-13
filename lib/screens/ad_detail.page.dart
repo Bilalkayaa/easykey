@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easykey/Custom/custom_color.dart';
+import 'package:easykey/services/firebase_post_service.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import '../classes/ads.dart';
-import '../classes/user.dart';
+import '../model/ads.dart';
+import '../model/user.dart';
 
 class adDetail extends StatefulWidget {
   const adDetail({super.key, required this.ad, required this.userData});
@@ -14,17 +16,26 @@ class adDetail extends StatefulWidget {
 }
 
 class _adDetailState extends State<adDetail> {
-  late bool isfav = false;
-
   User? user;
+  late bool isfav = false;
   void initState() {
+    super.initState();
     _fetchUserData();
     getUserFromFirestore(widget.ad.uid);
-    super.initState();
+    print("object");
   }
 
+  void dispose() {
+    super.dispose();
+    print('dispose çağrıldı');
+  }
+
+  Postservice _post = Postservice();
   @override
   Widget build(BuildContext context) {
+    const double fontsize1 = 16;
+    const double fontsize2 = 26;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('İlan Detayı'),
@@ -46,7 +57,7 @@ class _adDetailState extends State<adDetail> {
                     padding: EdgeInsets.only(right: 8),
                     child: Image.network(
                       widget.ad.images[index],
-                      width: 150,
+                      width: 300,
                       height: 200,
                       fit: BoxFit.cover,
                     ),
@@ -59,11 +70,13 @@ class _adDetailState extends State<adDetail> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  widget.ad.title ?? "",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
+                Expanded(
+                  child: Text(
+                    widget.ad.title ?? "",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                    ),
                   ),
                 ),
                 IconButton(
@@ -72,13 +85,15 @@ class _adDetailState extends State<adDetail> {
                         setState(() {
                           isfav = false;
 
-                          removeFromFavorites();
+                          _post.removeFromFavorites(
+                              context, widget.ad.aid, widget.userData['id']);
                         });
                       } else {
                         setState(() {
                           isfav = true;
 
-                          addToFavorites();
+                          _post.addToFavorites(
+                              context, widget.ad.aid, widget.userData['id']);
                         });
                       }
                     },
@@ -91,24 +106,70 @@ class _adDetailState extends State<adDetail> {
               ],
             ),
             SizedBox(height: 8),
-            Text(user?.Name ?? ""),
-            // İlan açıklaması
             Text(
-              widget.ad.description ?? "",
-              style: TextStyle(fontSize: 16),
+              "${user?.Name} ${user?.Surname}",
+              style: TextStyle(
+                  color: CustomColors.primaryColor, fontSize: fontsize1),
             ),
+            // İlan açıklaması
+
             SizedBox(height: 8),
             // İlan fiyatı
-            Text(
-              'Fiyat: ${widget.ad.price} TL',
-              style: TextStyle(fontWeight: FontWeight.bold),
+            Row(
+              children: [
+                Text(
+                  "Fiyat: ",
+                  style: TextStyle(fontSize: fontsize1),
+                ),
+                Text(
+                  '${widget.ad.price} TL',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: fontsize1),
+                ),
+              ],
             ),
+
             SizedBox(height: 8),
             // İlan UID'si
             Text(
               'Adres: ${widget.ad.address}',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: fontsize1),
             ),
+            SizedBox(
+              height: 8,
+            ),
+            Text(
+              "İlan açıklaması:",
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, fontSize: fontsize2),
+            ),
+            Center(
+              child: Text(
+                widget.ad.description ?? "",
+                style: TextStyle(
+                  fontSize: fontsize1,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton.icon(
+                  icon: Icon(Icons.phone),
+                  onPressed: () async {
+                    // ignore: deprecated_member_use
+                    launch('tel:${user!.PhoneNumber}');
+                  },
+                  label: Text("Ara"),
+                ),
+                ElevatedButton.icon(
+                  icon: Icon(Icons.message),
+                  onPressed: () async {},
+                  label: Text("Mesaj"),
+                ),
+              ],
+            )
           ],
         ),
       ),
@@ -129,16 +190,18 @@ class _adDetailState extends State<adDetail> {
 
           // Kontrol etmek istediğiniz değer
           var valueToCheck = widget.ad.aid ?? "";
-
+          print("durak1");
           // Favs listesinde belirli bir değer var mı kontrol et
-          if (favs.contains(valueToCheck)) {
+          if (favs.contains(valueToCheck) == true) {
             setState(() {
+              print("durak2");
               // _userData = 'Favs alanı içinde $valueToCheck bulundu.';
               isfav = true;
               print(isfav);
             });
           } else {
             setState(() {
+              print("durak3");
               // _userData = 'Favs alanı içinde $valueToCheck bulunamadı.';
               isfav = false;
               print("{$isfav}asdasd");
@@ -161,35 +224,6 @@ class _adDetailState extends State<adDetail> {
     } catch (error) {
       print('Hata oluştu: $error');
     }
-  }
-
-  void addToFavorites() {
-    // Firebase Firestore'daki favoriler koleksiyonuna ilan ID'sini ekleyin
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(widget.userData['id'])
-        .update({
-      'Favs': FieldValue.arrayUnion([widget.ad.aid]),
-    }).then((_) {
-      print('Favorilere eklendi');
-    }).catchError((error) {
-      print('Hata: $error');
-    });
-  }
-
-  void removeFromFavorites() {
-    // Firebase Firestore'daki favoriler koleksiyonundan ilan ID'sini kaldırın
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(widget.userData['id'])
-        .update({
-      'Favs': FieldValue.arrayRemove([widget.ad.aid]),
-    }).then((_) {
-      print('Favorilerden kaldırıldı');
-      print(widget.ad.aid);
-    }).catchError((error) {
-      print('Hata: $error');
-    });
   }
 
   Future<void> getUserFromFirestore(String? userId) async {

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easykey/screens/ad_detail.page.dart';
 import 'package:flutter/material.dart';
 
-import '../classes/ads.dart';
+import '../model/ads.dart';
 
 class advertPage extends StatefulWidget {
   const advertPage({super.key, required this.userData});
@@ -22,13 +22,14 @@ class _advertPageState extends State<advertPage> {
     super.initState();
   }
 
+  Size get preferredSize => Size.fromHeight(kToolbarHeight);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('ads')
-            .orderBy('Date', descending: true)
+            .orderBy('Timestamp', descending: true)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -52,74 +53,90 @@ class _advertPageState extends State<advertPage> {
                             style: TextStyle(fontSize: 20),
                           ),
                         )
-                      : ListView.builder(
-                          padding: EdgeInsets.all(5),
-                          itemCount: adsList.length,
-                          controller: scrollController,
-                          itemBuilder: (context, index) {
-                            ads ad = adsList[index];
+                      : Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Flexible(
+                              child: ListView.builder(
+                                padding: EdgeInsets.only(
+                                    left: 5,
+                                    right: 5,
+                                    top: kToolbarHeight,
+                                    bottom: 75),
+                                itemCount: adsList.length,
+                                controller: scrollController,
+                                itemBuilder: (context, index) {
+                                  ads ad = adsList[index];
 
-                            return Card(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16)),
-                              margin: EdgeInsets.all(5),
-                              child: ListTile(
-                                onTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => adDetail(
-                                              ad: ad,
-                                              userData: widget.userData,
-                                            ))),
-                                contentPadding: EdgeInsets.all(0),
-                                title: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(16),
-                                      child: Image.network(
-                                        ad.images.isNotEmpty
-                                            ? ad.images[0]
-                                            : '',
-                                        width: double
-                                            .infinity, // Resmi genişliği ekrana sığacak şekilde ayarla
-                                        height:
-                                            200, // Resmin yüksekliğini ayarla (isteğe bağlı)
-                                        fit: BoxFit
-                                            .cover, // Resmi uygun şekilde boyutlandır
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.all(8),
-                                      child: Column(
+                                  return Card(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(16)),
+                                    margin: EdgeInsets.all(5),
+                                    child: ListTile(
+                                      onTap: () => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => adDetail(
+                                                    ad: ad,
+                                                    userData: widget.userData,
+                                                  ))),
+                                      contentPadding: EdgeInsets.all(0),
+                                      title: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                "${ad.title}",
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                            ],
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(16),
+                                            child: Image.network(
+                                              ad.images.isNotEmpty
+                                                  ? ad.images[0]
+                                                  : '',
+                                              width: double
+                                                  .infinity, // Resmi genişliği ekrana sığacak şekilde ayarla
+                                              height:
+                                                  200, // Resmin yüksekliğini ayarla (isteğe bağlı)
+                                              fit: BoxFit
+                                                  .cover, // Resmi uygun şekilde boyutlandır
+                                            ),
                                           ),
-                                          Text(
-                                            "${ad.price} TL",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.normal),
-                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.all(8),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                      "${ad.title}",
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Text(
+                                                  "${ad.price} TL",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.normal),
+                                                ),
+                                              ],
+                                            ),
+                                          )
                                         ],
                                       ),
-                                    )
-                                  ],
-                                ),
+                                    ),
+                                  );
+                                },
                               ),
-                            );
-                          },
+                            ),
+                          ],
                         ),
                 ),
               ],

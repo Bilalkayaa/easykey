@@ -115,8 +115,7 @@ class AuthService {
   Future<void> registerAds(
       {required List<String> images,
       required String uid,
-      required String date,
-      required String hour,
+      required Timestamp timestamp,
       required String address,
       required String title,
       required String description,
@@ -130,8 +129,7 @@ class AuthService {
         'images': images,
         'uid': uid,
         'aid': aid,
-        'Date': date,
-        'Hour': hour,
+        'Timestamp': timestamp,
         'Address': address,
         'Title': title,
         'Description': description,
@@ -141,24 +139,6 @@ class AuthService {
       // Kayıt işlemi sırasında oluşabilecek hataları ele alın
       print("Kullanıcı kaydı sırasında hata oluştu: $e");
     }
-  }
-
-  void showLoadingDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: Row(
-            children: [
-              CircularProgressIndicator(),
-              SizedBox(width: 16),
-              Text("Loading..."),
-            ],
-          ),
-        );
-      },
-    );
   }
 
   void showErrorDialog(BuildContext context, String message) {

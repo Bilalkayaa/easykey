@@ -2,7 +2,7 @@ import 'package:easykey/Custom/custom_color.dart';
 import 'package:easykey/screens/signup_page.dart';
 import 'package:flutter/material.dart';
 
-import '../services/firebase_service.dart';
+import '../services/firebase_auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

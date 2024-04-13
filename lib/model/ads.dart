@@ -1,9 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class ads {
   List<String> images;
   String? uid;
   String? aid;
-  String? date;
-  String? hour;
+  final Timestamp? timestamp;
   String? address;
   String? title;
   String? description;
@@ -13,8 +14,7 @@ class ads {
     required this.images,
     required this.uid,
     required this.aid,
-    required this.date,
-    required this.hour,
+    required this.timestamp,
     required this.address,
     required this.description,
     required this.title,
@@ -26,8 +26,7 @@ class ads {
       'images': images,
       'uid': uid,
       'aid': aid,
-      'Date': date,
-      'Hour': hour,
+      'Timestamp': timestamp,
       'Address': address,
       'Title': title,
       'Description': description,
@@ -40,8 +39,8 @@ class ads {
       images: List<String>.from(map['images'] ?? []),
       uid: map['uid'],
       aid: map['aid'],
-      date: map['Date'],
-      hour: map['Hour'],
+      timestamp:
+          map['Timestamp'] != null ? (map['Timestamp'] as Timestamp) : null,
       address: map['Address'],
       description: map['Description'],
       title: map['Title'],
