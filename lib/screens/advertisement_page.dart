@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easykey/screens/ad_detail.page.dart';
 import 'package:flutter/material.dart';
 
-import '../model/ads.dart';
+import '../models/ads.dart';
 
 class advertPage extends StatefulWidget {
   const advertPage({super.key, required this.userData});
@@ -22,7 +22,6 @@ class _advertPageState extends State<advertPage> {
     super.initState();
   }
 
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +60,7 @@ class _advertPageState extends State<advertPage> {
                                 padding: EdgeInsets.only(
                                     left: 5,
                                     right: 5,
-                                    top: kToolbarHeight,
+                                    top: MediaQuery.of(context).size.height / 8,
                                     bottom: 75),
                                 itemCount: adsList.length,
                                 controller: scrollController,
@@ -80,7 +79,9 @@ class _advertPageState extends State<advertPage> {
                                               builder: (context) => adDetail(
                                                     ad: ad,
                                                     userData: widget.userData,
-                                                  ))),
+                                                  ))).whenComplete(() {
+                                        setState(() {});
+                                      }),
                                       contentPadding: EdgeInsets.all(0),
                                       title: Column(
                                         crossAxisAlignment:

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-import '../Custom/custom_color.dart';
+import '../../Custom/custom_color.dart';
 
 class IntroPage2 extends StatefulWidget {
   @override

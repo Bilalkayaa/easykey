@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../Custom/custom_color.dart';
-import '../services/firebase_auth_service.dart';
 
 class addAdd extends StatefulWidget {
   const addAdd({super.key, required this.userData});
@@ -30,6 +29,10 @@ TextEditingController advertDescription = TextEditingController();
 TextEditingController Address = TextEditingController();
 
 TextEditingController advertPrice = TextEditingController();
+
+TextEditingController advertFloor = TextEditingController();
+
+TextEditingController advertNumber = TextEditingController();
 
 Postservice _post = Postservice();
 
@@ -115,11 +118,42 @@ class _addAddState extends State<addAdd> {
                   height: 10,
                 ),
                 TextFormField(
+                  keyboardType: TextInputType.number,
                   decoration: customInputDecoration(flag: true),
                   controller: advertPrice,
                   maxLength: 50,
                   minLines: 1,
                   maxLines: 2,
+                ),
+                Text(
+                  "Kat",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.number,
+                  decoration: customInputDecoration(),
+                  controller: advertFloor,
+                  maxLength: 2,
+                  minLines: 1,
+                  maxLines: 1,
+                ),
+                Text(
+                  "Numara",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.number,
+                  decoration: customInputDecoration(),
+                  controller: advertNumber,
+                  maxLength: 2,
+                  minLines: 1,
+                  maxLines: 1,
                 ),
                 selectedImages.isEmpty
                     ? SizedBox(
@@ -207,9 +241,18 @@ class _addAddState extends State<addAdd> {
                           advertTitle.text != "" &&
                           Address.text != "" &&
                           advertPrice.text != "" &&
-                          isNumeric(advertPrice.text)) {
-                        _uploadAds(Address.text, advertTitle.text,
-                            advertDescription.text, advertPrice.text);
+                          advertNumber.text != "" &&
+                          advertFloor.text != "" &&
+                          isNumeric(advertPrice.text) &&
+                          isNumeric(advertNumber.text) &&
+                          isNumeric(advertFloor.text)) {
+                        _uploadAds(
+                            Address.text,
+                            advertTitle.text,
+                            advertDescription.text,
+                            advertPrice.text,
+                            advertFloor.text,
+                            advertNumber.text);
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -270,8 +313,8 @@ class _addAddState extends State<addAdd> {
     );
   }
 
-  Future<void> _uploadAds(
-      String address, String title, String description, String price) async {
+  Future<void> _uploadAds(String address, String title, String description,
+      String price, String floor, String number) async {
     setState(() {
       uploading = true;
     });
@@ -293,7 +336,9 @@ class _addAddState extends State<addAdd> {
         address: address,
         description: description,
         title: title,
-        price: price);
+        price: price,
+        floor: floor,
+        number: number);
     setState(() {
       uploading = false;
       selectedImages.clear();

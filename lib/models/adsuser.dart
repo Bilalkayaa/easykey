@@ -1,4 +1,4 @@
-class User {
+class adsUser {
   String? TCKN;
   String? Name;
   String? Surname;
@@ -11,7 +11,7 @@ class User {
   String? PhoneNumber;
   List<String> favs;
 
-  User(
+  adsUser(
       {this.SerialNumber,
       this.Birthdate,
       this.TCKN,
@@ -39,8 +39,8 @@ class User {
     };
   }
 
-  factory User.fromMap(Map<String, dynamic> map) {
-    return User(
+  factory adsUser.fromMap(Map<String, dynamic> map) {
+    return adsUser(
       SerialNumber: map['SerialNumber'],
       Birthdate: map['Birthdate'],
       TCKN: map['TCKN'],

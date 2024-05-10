@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../model/ads.dart';
-import '../model/user.dart';
+import '../models/ads.dart';
 import 'ad_detail.page.dart';
 
 class FavoritesPage extends StatefulWidget {
-  final Map<String, dynamic> userData;
+  final userData;
 
   const FavoritesPage({Key? key, required this.userData}) : super(key: key);
 
@@ -49,7 +48,11 @@ class _FavoritesPageState extends State<FavoritesPage> {
             ));
           } else {
             return ListView.builder(
-              padding: EdgeInsets.only(left: 5, right: 5, top: 80, bottom: 75),
+              padding: EdgeInsets.only(
+                  left: 5,
+                  right: 5,
+                  top: MediaQuery.of(context).size.height / 8,
+                  bottom: 75),
               itemCount: favoriteAds.length,
               itemBuilder: (context, index) {
                 String adId = favoriteAds[index];

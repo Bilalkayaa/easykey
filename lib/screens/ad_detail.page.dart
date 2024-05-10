@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easykey/Custom/custom_color.dart';
+import 'package:easykey/models/message.dart';
+import 'package:easykey/screens/keycode_page.dart';
+import 'package:easykey/services/firebase_message_service.dart';
 import 'package:easykey/services/firebase_post_service.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../model/ads.dart';
-import '../model/user.dart';
+import '../models/ads.dart';
+import '../models/user.dart';
 
 class adDetail extends StatefulWidget {
   const adDetail({super.key, required this.ad, required this.userData});
@@ -18,11 +21,27 @@ class adDetail extends StatefulWidget {
 class _adDetailState extends State<adDetail> {
   User? user;
   late bool isfav = false;
+
+  Message _message = Message(
+      senderID: "senderID",
+      senderEmail: "senderEmail",
+      receiverId: "receiverId",
+      message: "mselam",
+      timestamp: Timestamp.now());
+  MessageService _messageService = MessageService();
   void initState() {
     super.initState();
-    _fetchUserData();
+    // _fetchUserData();
     getUserFromFirestore(widget.ad.uid);
     print("object");
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+
+    _fetchUserData();
+    super.didChangeDependencies();
   }
 
   void dispose() {
@@ -111,10 +130,9 @@ class _adDetailState extends State<adDetail> {
               style: TextStyle(
                   color: CustomColors.primaryColor, fontSize: fontsize1),
             ),
-            // İlan açıklaması
 
             SizedBox(height: 8),
-            // İlan fiyatı
+
             Row(
               children: [
                 Text(
@@ -152,6 +170,17 @@ class _adDetailState extends State<adDetail> {
                 textAlign: TextAlign.center,
               ),
             ),
+            Text(
+              'Kat: ${widget.ad.floor ?? ""}',
+              style: TextStyle(fontSize: fontsize1),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              'Numara: ${widget.ad.number ?? ""}',
+              style: TextStyle(fontSize: fontsize1),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -165,11 +194,27 @@ class _adDetailState extends State<adDetail> {
                 ),
                 ElevatedButton.icon(
                   icon: Icon(Icons.message),
-                  onPressed: () async {},
+                  onPressed: () async {
+                    _messageService.sendMessage(
+                        widget.userData['id'], user!.uid, _message);
+                  },
                   label: Text("Mesaj"),
                 ),
               ],
-            )
+            ),
+            Center(
+              child: ElevatedButton.icon(
+                icon: Icon(Icons.message),
+                onPressed: () async {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => keycodePage(),
+                      ));
+                },
+                label: Text("Gezmeye başla!"),
+              ),
+            ),
           ],
         ),
       ),

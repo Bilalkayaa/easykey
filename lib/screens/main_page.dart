@@ -1,6 +1,7 @@
 import 'package:easykey/Custom/custom_color.dart';
 import 'package:easykey/screens/ads_add_page.dart';
 import 'package:easykey/screens/advertisement_page.dart';
+import 'package:easykey/screens/chatlist_page.dart';
 import 'package:easykey/screens/favorites_page.dart';
 import 'package:easykey/screens/myads_page.dart';
 import 'package:easykey/screens/profile_page.dart';
@@ -45,6 +46,20 @@ class _MainPageState extends State<MainPage> {
             },
             child: Icon(Icons.add_rounded)),
         appBar: AppBar(
+          toolbarHeight: kToolbarHeight,
+          actions: [
+            IconButton(
+              splashColor: Colors.transparent,
+              icon: Icon(Icons.message),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: ((context) =>
+                            ChatList(userData: widget.userData))));
+              },
+            )
+          ],
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(32),

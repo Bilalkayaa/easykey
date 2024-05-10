@@ -1,13 +1,14 @@
-import 'package:easykey/screens/login_page.dart';
+import 'package:easykey/screens/loginandsignup/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 import 'firebase_options.dart';
-import 'intros/OnBoarding.dart';
+import 'screens/intros/OnBoarding.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   try {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,

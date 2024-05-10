@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../models/user.dart';
+
 class profilePage extends StatefulWidget {
   const profilePage({super.key, required this.uid, required this.userData});
   final String uid;
@@ -10,9 +12,11 @@ class profilePage extends StatefulWidget {
 }
 
 class _profilePageState extends State<profilePage> {
+  late User user;
   @override
   void initState() {
     super.initState();
+    user = User.fromMap(widget.userData);
   }
 
   @override
@@ -76,28 +80,5 @@ class _profilePageState extends State<profilePage> {
         ),
       ),
     );
-    // CollectionReference users = FirebaseFirestore.instance.collection('users');
-
-    // return FutureBuilder<DocumentSnapshot>(
-    //   future: users.doc(widget.uid).get(),
-    //   builder:
-    //       (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-    //     if (snapshot.hasError) {
-    //       return Text("Something went wrong");
-    //     }
-
-    //     if (snapshot.hasData && !snapshot.data!.exists) {
-    //       return Text("Document does not exist");
-    //     }
-
-    //     if (snapshot.connectionState == ConnectionState.done) {
-    //       Map<String, dynamic> data =
-    //           snapshot.data!.data() as Map<String, dynamic>;
-    //       return Text("Full Name: ${data['full_name']} ${data['last_name']}");
-    //     }
-
-    //     return Text("loading");
-    //   },
-    // );
   }
 }

@@ -2,14 +2,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Postservice {
-  Future<void> registerAds(
-      {required List<String> images,
-      required String uid,
-      required Timestamp timestamp,
-      required String address,
-      required String title,
-      required String description,
-      required String price}) async {
+  Future<void> registerAds({
+    required List<String> images,
+    required String uid,
+    required Timestamp timestamp,
+    required String address,
+    required String title,
+    required String description,
+    required String price,
+    required String floor,
+    required String number,
+  }) async {
     try {
       final FirebaseFirestore _firestore = FirebaseFirestore.instance;
       DocumentReference docRef = await _firestore.collection('ads').doc();
@@ -24,6 +27,8 @@ class Postservice {
         'Title': title,
         'Description': description,
         'Price': price,
+        'Floor': floor,
+        'Number': number,
       });
     } catch (e) {
       // Kayıt işlemi sırasında oluşabilecek hataları ele alın

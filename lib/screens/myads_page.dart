@@ -3,7 +3,7 @@ import 'package:easykey/screens/ad_detail.page.dart';
 import 'package:easykey/services/firebase_post_service.dart';
 import 'package:flutter/material.dart';
 
-import '../model/ads.dart';
+import '../models/ads.dart';
 
 class myAdsPage extends StatefulWidget {
   const myAdsPage({super.key, required this.id, required this.userData});
@@ -56,7 +56,10 @@ class _myAdsPageState extends State<myAdsPage> {
                         )
                       : ListView.builder(
                           padding: EdgeInsets.only(
-                              left: 5, right: 5, top: 80, bottom: 75),
+                              left: 5,
+                              right: 5,
+                              top: MediaQuery.of(context).size.height / 8,
+                              bottom: 75),
                           itemCount: adsList.length,
                           controller: scrollController,
                           itemBuilder: (context, index) {

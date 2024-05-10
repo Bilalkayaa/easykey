@@ -1,10 +1,10 @@
-import 'package:easykey/screens/login_page.dart';
+import 'package:easykey/screens/loginandsignup/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../Custom/custom_color.dart';
-import '../controllers/extract_data_controller.dart';
-import '../services/firebase_auth_service.dart';
+import '../../Custom/custom_color.dart';
+import '../../controllers/extract_data_controller.dart';
+import '../../services/firebase_auth_service.dart';
 
 // ignore: must_be_immutable
 class IdDetailPage extends StatelessWidget {
@@ -238,7 +238,7 @@ class IdDetailPage extends StatelessWidget {
                       Icons.arrow_back,
                       color: Colors.white,
                     )),
-                flagvisible
+                extractDataController.isOk
                     ? Container(
                         margin: EdgeInsets.symmetric(vertical: 8.0),
                         child: TextButton(
@@ -248,23 +248,6 @@ class IdDetailPage extends StatelessWidget {
                               borderRadius: BorderRadius.circular(20.0),
                             ),
                           ),
-                          // onPressed: () {
-                          //   _auth.signUp(context,
-                          //       email: Email,
-                          //       password: Password,
-                          //       PhoneNumber: Phonenumber,
-                          //       TCKN: "59308202616",
-                          //       name: "bilal",
-                          //       surname: "kaya",
-                          //       Birthdate: "15.12.2000",
-                          //       SerialNumber: "321",
-                          //       ValidUntil: "123");
-                          //   Navigator.push(
-                          //       context,
-                          //       MaterialPageRoute(
-                          //         builder: (context) => LoginPage(),
-                          //       ));
-                          // },
                           onPressed: () {
                             _auth.signUp(context,
                                 email: Email,
@@ -285,7 +268,6 @@ class IdDetailPage extends StatelessWidget {
                                   builder: (context) => LoginPage(),
                                 ));
                           },
-
                           child: Text(
                             'Giriş yap',
                             style: TextStyle(
@@ -294,10 +276,7 @@ class IdDetailPage extends StatelessWidget {
                           ),
                         ),
                       )
-                    : Placeholder(
-                        fallbackHeight: 20,
-                        fallbackWidth: 20,
-                      ),
+                    : SizedBox()
               ],
             ),
           )

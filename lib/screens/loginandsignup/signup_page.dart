@@ -1,6 +1,7 @@
 import 'package:easykey/Custom/custom_color.dart';
-import 'package:easykey/screens/id_scan_screen.dart';
+import 'package:easykey/screens/loginandsignup/id_scan_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class SignupPage extends StatefulWidget {
@@ -101,6 +102,7 @@ class _SignupPageState extends State<SignupPage> {
                                 keyboardType: TextInputType.number,
                                 maxLength: 11,
                                 decoration: InputDecoration(
+                                    prefixText: "+90",
                                     hintText:
                                         "11 haneli telefon numaranızı giriniz.",
                                     labelText: "Telefon numarası",

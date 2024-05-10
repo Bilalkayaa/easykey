@@ -22,6 +22,7 @@ class ExtractDataController extends GetxController {
   RxString idName = "".obs;
   RxString idSurname = "".obs;
   String barcodeValue = '';
+  bool isOk = false;
 
   RegExp dateRegex = RegExp(
       r'^\d{2}\.\d{2}\.\d{4}$'); // get date from picture and validate with this Regex
@@ -228,7 +229,6 @@ class ExtractDataController extends GetxController {
 
       print(line);
     }
-    counter = 6;
     if (counter != 6) {
       Get.snackbar('Hata',
           "Kimlik kartı fotoğrafından bazı veriler alınamadı. Lütfen fotoğraf kalitesini kontrol edip tekrar deneyin...",
@@ -236,7 +236,7 @@ class ExtractDataController extends GetxController {
       // flagvisible = true;
     } else {
       // flagvisible = true;
-
+      isOk = true;
       Get.snackbar(
         'Başarılı',
         'Veriler kimlik kartı fotoğrafından başarıyla alındı.',

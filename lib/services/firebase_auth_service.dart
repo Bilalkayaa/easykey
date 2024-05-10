@@ -18,8 +18,7 @@ class AuthService {
         // Belirli bir koleksiyondaki belgeleri sorgula
         QuerySnapshot querySnapshot = await firestore
             .collection('users') // Koleksiyon adını buraya girin
-            .where('id',
-                isEqualTo: uid) // 'name' alanı 'bilal' olanları filtrele
+            .where('id', isEqualTo: uid)
             .get();
 
         // Sorgu sonucunda elde edilen belgeleri işle
@@ -105,35 +104,6 @@ class AuthService {
         "PhoneNumber": PhoneNumber,
         "id": uid,
         "Favs": []
-      });
-    } catch (e) {
-      // Kayıt işlemi sırasında oluşabilecek hataları ele alın
-      print("Kullanıcı kaydı sırasında hata oluştu: $e");
-    }
-  }
-
-  Future<void> registerAds(
-      {required List<String> images,
-      required String uid,
-      required Timestamp timestamp,
-      required String address,
-      required String title,
-      required String description,
-      required String price}) async {
-    try {
-      final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-      DocumentReference docRef = await _firestore.collection('ads').doc();
-      String aid = docRef.id;
-
-      await docRef.set({
-        'images': images,
-        'uid': uid,
-        'aid': aid,
-        'Timestamp': timestamp,
-        'Address': address,
-        'Title': title,
-        'Description': description,
-        'Price': price,
       });
     } catch (e) {
       // Kayıt işlemi sırasında oluşabilecek hataları ele alın
