@@ -77,14 +77,32 @@ class _LoginPageState extends State<LoginPage> {
                                 obscureText: isHidden,
                                 controller: passwordController,
                                 decoration: InputDecoration(
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors
+                                            .black), // Focus olduğunda alt çizgi rengi
+                                  ),
+                                  enabledBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.black)),
                                   labelText: "Şifre",
+                                  labelStyle: TextStyle(color: Colors.black),
                                   hintText: "",
-                                  prefixIcon: Icon(Icons.key),
+                                  prefixIcon: Icon(
+                                    Icons.key,
+                                    color: Colors.black,
+                                  ),
                                   suffixIcon: IconButton(
                                       onPressed: Chngvisibility,
                                       icon: isHidden
-                                          ? Icon(Icons.visibility)
-                                          : Icon(Icons.visibility_off)),
+                                          ? Icon(
+                                              Icons.visibility,
+                                              color: Colors.black,
+                                            )
+                                          : Icon(
+                                              Icons.visibility_off,
+                                              color: Colors.black,
+                                            )),
                                 ),
                               ),
                             ),

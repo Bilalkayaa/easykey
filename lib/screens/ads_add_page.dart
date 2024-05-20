@@ -307,6 +307,10 @@ class _addAddState extends State<addAdd> {
 
   InputDecoration customInputDecoration({bool flag = false}) {
     return InputDecoration(
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.black),
+          borderRadius: BorderRadius.circular(8.0),
+        ),
         suffixText: flag ? "\u20BA" : "",
         suffixStyle:
             TextStyle(color: CustomColors.secondaryColor, fontSize: 20),

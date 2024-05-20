@@ -81,6 +81,7 @@ class _MainPageState extends State<MainPage> {
           notchMargin: 5,
           shape: CircularNotchedRectangle(),
           child: TabBar(
+              dividerHeight: 0,
               unselectedLabelColor: Colors.white,
               labelColor: CustomColors.secondaryColor,
               indicator: BoxDecoration(),

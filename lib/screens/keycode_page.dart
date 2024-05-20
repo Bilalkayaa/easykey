@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class keycodePage extends StatefulWidget {
@@ -10,8 +11,17 @@ class keycodePage extends StatefulWidget {
 }
 
 class _keycodePageState extends State<keycodePage> {
+  DatabaseReference _test = FirebaseDatabase.instance.ref().child("test");
+
   void initState() {
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _test.remove();
   }
 
   @override
@@ -19,6 +29,7 @@ class _keycodePageState extends State<keycodePage> {
     var random = Random();
     int randomNumber = 1000 + random.nextInt(9000);
 
+    _test.set(randomNumber);
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
