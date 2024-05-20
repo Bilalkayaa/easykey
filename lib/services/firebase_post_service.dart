@@ -12,6 +12,8 @@ class Postservice {
     required String price,
     required String floor,
     required String number,
+    required String safeBoxNumber,
+    required String boxDoorNumber,
   }) async {
     try {
       final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -29,6 +31,8 @@ class Postservice {
         'Price': price,
         'Floor': floor,
         'Number': number,
+        'safeBoxNumber': safeBoxNumber,
+        'boxDoorNumber': boxDoorNumber,
       });
     } catch (e) {
       // Kayıt işlemi sırasında oluşabilecek hataları ele alın

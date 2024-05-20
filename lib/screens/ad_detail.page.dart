@@ -1,14 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easykey/Custom/custom_color.dart';
-import 'package:easykey/models/message.dart';
 import 'package:easykey/screens/keycode_page.dart';
-import 'package:easykey/services/firebase_message_service.dart';
 import 'package:easykey/services/firebase_post_service.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../models/ads.dart';
 import '../models/user.dart';
+import 'chat_page.dart';
 
 class adDetail extends StatefulWidget {
   const adDetail({super.key, required this.ad, required this.userData});
@@ -22,13 +21,6 @@ class _adDetailState extends State<adDetail> {
   User? user;
   late bool isfav = false;
 
-  Message _message = Message(
-      senderID: "senderID",
-      senderEmail: "senderEmail",
-      receiverId: "receiverId",
-      message: "mselam",
-      timestamp: Timestamp.now());
-  MessageService _messageService = MessageService();
   void initState() {
     super.initState();
     // _fetchUserData();
@@ -157,20 +149,6 @@ class _adDetailState extends State<adDetail> {
               height: 8,
             ),
             Text(
-              "İlan açıklaması:",
-              style:
-                  TextStyle(fontWeight: FontWeight.bold, fontSize: fontsize2),
-            ),
-            Center(
-              child: Text(
-                widget.ad.description ?? "",
-                style: TextStyle(
-                  fontSize: fontsize1,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            Text(
               'Kat: ${widget.ad.floor ?? ""}',
               style: TextStyle(fontSize: fontsize1),
             ),
@@ -181,6 +159,39 @@ class _adDetailState extends State<adDetail> {
               'Numara: ${widget.ad.number ?? ""}',
               style: TextStyle(fontSize: fontsize1),
             ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              'Kasa Numarası: ${widget.ad.safeBoxNumber ?? ""}',
+              style: TextStyle(fontSize: fontsize1),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              'Kasa Kapı Numaras: ${widget.ad.boxDoorNumber ?? ""}',
+              style: TextStyle(fontSize: fontsize1),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              "İlan açıklaması:",
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, fontSize: fontsize2),
+            ),
+
+            Center(
+              child: Text(
+                widget.ad.description ?? "",
+                style: TextStyle(
+                  fontSize: fontsize1,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -195,8 +206,20 @@ class _adDetailState extends State<adDetail> {
                 ElevatedButton.icon(
                   icon: Icon(Icons.message),
                   onPressed: () async {
-                    _messageService.sendMessage(
-                        widget.userData['id'], user!.uid, _message);
+                    if (widget.ad.uid == widget.userData['id']) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          duration: Duration(seconds: 1),
+                          content: Text('Kendinize mesaj gönderemezsiniz.')));
+                    } else {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => chatPage(
+                                    id: widget.ad.uid ?? "",
+                                    name: user!.Name ?? "",
+                                    userData: widget.userData,
+                                  )));
+                    }
                   },
                   label: Text("Mesaj"),
                 ),
@@ -204,7 +227,7 @@ class _adDetailState extends State<adDetail> {
             ),
             Center(
               child: ElevatedButton.icon(
-                icon: Icon(Icons.message),
+                icon: Icon(Icons.key),
                 onPressed: () async {
                   Navigator.push(
                       context,
@@ -212,7 +235,7 @@ class _adDetailState extends State<adDetail> {
                         builder: (context) => keycodePage(),
                       ));
                 },
-                label: Text("Gezmeye başla!"),
+                label: Text("Ziyaret et!"),
               ),
             ),
           ],

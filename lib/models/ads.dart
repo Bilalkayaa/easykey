@@ -11,6 +11,8 @@ class ads {
   String? price;
   String? floor;
   String? number;
+  String? safeBoxNumber;
+  String? boxDoorNumber;
 
   ads(
       {required this.images,
@@ -22,7 +24,9 @@ class ads {
       required this.title,
       required this.price,
       required this.floor,
-      required this.number});
+      required this.number,
+      required this.safeBoxNumber,
+      required this.boxDoorNumber});
 
   Map<String, dynamic> toMap() {
     return {
@@ -35,7 +39,9 @@ class ads {
       'Description': description,
       'Price': price,
       'Floor': floor,
-      'Numbar': number,
+      'Number': number,
+      'safeBoxNumber': safeBoxNumber,
+      'boxDoorNumber': boxDoorNumber,
     };
   }
 
@@ -52,6 +58,8 @@ class ads {
       price: map['Price'],
       floor: map['Floor'],
       number: map['Number'],
+      safeBoxNumber: map['safeBoxNumber'],
+      boxDoorNumber: map['boxDoorNumber'],
     );
   }
 }

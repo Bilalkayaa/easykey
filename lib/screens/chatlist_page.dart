@@ -13,13 +13,17 @@ class ChatList extends StatefulWidget {
 class _ChatListState extends State<ChatList> {
   @override
   void initState() {
+    setState(() {});
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("Mesajlar")),
+        appBar: AppBar(
+          title: Text("Mesajlar"),
+          backgroundColor: CustomColors.primaryColor,
+        ),
         body: StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection('users')
@@ -75,9 +79,13 @@ class _ChatListState extends State<ChatList> {
                     return Card(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16)),
-                      margin: EdgeInsets.all(10),
+                      margin: EdgeInsets.all(4),
                       color: Colors.grey,
                       child: ListTile(
+                        leading: CircleAvatar(
+                          child: Text(chatNames[index][0]),
+                          backgroundColor: CustomColors.secondaryColor,
+                        ),
                         title: Text(chatNames[index]),
                         onTap: () {
                           Navigator.push(
@@ -86,7 +94,7 @@ class _ChatListState extends State<ChatList> {
                                   builder: (context) => chatPage(
                                         id: chatIds[index],
                                         name: chatNames[index],
-                                        userID: widget.userData['id'],
+                                        userData: widget.userData,
                                       )));
                         },
                       ),

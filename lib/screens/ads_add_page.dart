@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easykey/screens/safebox_page.dart';
 import 'package:easykey/services/firebase_post_service.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -34,6 +35,10 @@ TextEditingController advertFloor = TextEditingController();
 
 TextEditingController advertNumber = TextEditingController();
 
+String? safeBoxNumber;
+
+String? boxDoorNumber;
+
 Postservice _post = Postservice();
 
 class _addAddState extends State<addAdd> {
@@ -46,6 +51,8 @@ class _addAddState extends State<addAdd> {
     advertDescription.clear();
     advertPrice.clear();
     Address.clear();
+    advertFloor.clear();
+    advertNumber.clear();
     super.dispose();
   }
 
@@ -121,7 +128,7 @@ class _addAddState extends State<addAdd> {
                   keyboardType: TextInputType.number,
                   decoration: customInputDecoration(flag: true),
                   controller: advertPrice,
-                  maxLength: 50,
+                  maxLength: 9,
                   minLines: 1,
                   maxLines: 2,
                 ),
@@ -246,13 +253,29 @@ class _addAddState extends State<addAdd> {
                           isNumeric(advertPrice.text) &&
                           isNumeric(advertNumber.text) &&
                           isNumeric(advertFloor.text)) {
-                        _uploadAds(
-                            Address.text,
-                            advertTitle.text,
-                            advertDescription.text,
-                            advertPrice.text,
-                            advertFloor.text,
-                            advertNumber.text);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => safeBox(onUploadPressed:
+                                      (safeBoxNumber, boxDoorNumber) {
+                                    _uploadAds(
+                                        Address.text,
+                                        advertTitle.text,
+                                        advertDescription.text,
+                                        advertPrice.text,
+                                        advertFloor.text,
+                                        advertNumber.text,
+                                        safeBoxNumber,
+                                        boxDoorNumber);
+                                  })),
+                        );
+                        // _uploadAds(
+                        //     Address.text,
+                        //     advertTitle.text,
+                        //     advertDescription.text,
+                        //     advertPrice.text,
+                        //     advertFloor.text,
+                        //     advertNumber.text);
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -313,8 +336,15 @@ class _addAddState extends State<addAdd> {
     );
   }
 
-  Future<void> _uploadAds(String address, String title, String description,
-      String price, String floor, String number) async {
+  Future<void> _uploadAds(
+      String address,
+      String title,
+      String description,
+      String price,
+      String floor,
+      String number,
+      String safeBoxNumber,
+      String boxDoorNumber) async {
     setState(() {
       uploading = true;
     });
@@ -330,15 +360,18 @@ class _addAddState extends State<addAdd> {
       _imageUrls.add(downloadUrl);
     }
     await _post.registerAds(
-        images: _imageUrls,
-        uid: widget.userData['id'],
-        timestamp: timestamp,
-        address: address,
-        description: description,
-        title: title,
-        price: price,
-        floor: floor,
-        number: number);
+      images: _imageUrls,
+      uid: widget.userData['id'],
+      timestamp: timestamp,
+      address: address,
+      description: description,
+      title: title,
+      price: price,
+      floor: floor,
+      number: number,
+      safeBoxNumber: safeBoxNumber,
+      boxDoorNumber: boxDoorNumber,
+    );
     setState(() {
       uploading = false;
       selectedImages.clear();

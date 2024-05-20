@@ -118,13 +118,43 @@ class _myAdsPageState extends State<myAdsPage> {
                                         child: Image.network(
                                           ad.images.isNotEmpty
                                               ? ad.images[0]
-                                              : '',
-                                          width: double
-                                              .infinity, // Resmi genişliği ekrana sığacak şekilde ayarla
-                                          height:
-                                              200, // Resmin yüksekliğini ayarla (isteğe bağlı)
-                                          fit: BoxFit
-                                              .cover, // Resmi uygun şekilde boyutlandır
+                                              : 'https://i.pinimg.com/736x/a1/59/97/a1599763f7d4a5200a7af45086abad3f.jpg',
+                                          width: double.infinity,
+                                          height: 200,
+                                          fit: BoxFit.cover,
+                                          loadingBuilder: (BuildContext context,
+                                              Widget child,
+                                              ImageChunkEvent?
+                                                  loadingProgress) {
+                                            if (loadingProgress == null) {
+                                              return child;
+                                            } else {
+                                              return Center(
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  value: loadingProgress
+                                                              .expectedTotalBytes !=
+                                                          null
+                                                      ? loadingProgress
+                                                              .cumulativeBytesLoaded /
+                                                          (loadingProgress
+                                                                  .expectedTotalBytes ??
+                                                              1)
+                                                      : null,
+                                                ),
+                                              );
+                                            }
+                                          },
+                                          errorBuilder: (BuildContext context,
+                                              Object error,
+                                              StackTrace? stackTrace) {
+                                            return Image.network(
+                                              'https://i.pinimg.com/736x/a1/59/97/a1599763f7d4a5200a7af45086abad3f.jpg',
+                                              width: double.infinity,
+                                              height: 200,
+                                              fit: BoxFit.cover,
+                                            );
+                                          },
                                         ),
                                       ),
                                       Padding(
