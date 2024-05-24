@@ -13,6 +13,21 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool isHidden = true;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _focusNodePass.addListener(() {
+      setState(() {});
+    });
+  }
+
+  void dispose() {
+    _focusNodePass.dispose();
+    super.dispose();
+  }
+
   void Chngvisibility() {
     setState(() {
       isHidden = !isHidden;
@@ -24,6 +39,9 @@ class _LoginPageState extends State<LoginPage> {
   bool _isLoading = false;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  FocusNode _focusNodePass = FocusNode();
+  FocusNode _focusNodeEmail = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,17 +81,33 @@ class _LoginPageState extends State<LoginPage> {
                                   vertical:
                                       8.0), // Aralık eklemek için margin kullanıyoruz
                               child: TextFormField(
+                                focusNode: _focusNodeEmail,
                                 controller: emailController,
                                 keyboardType: TextInputType.emailAddress,
                                 decoration: InputDecoration(
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors
+                                              .black), // Focus olduğunda alt çizgi rengi
+                                    ),
                                     labelText: "Kullanıcı adı",
+                                    labelStyle: TextStyle(
+                                        color: _focusNodeEmail.hasFocus
+                                            ? Colors.black
+                                            : null),
                                     hintText: "",
-                                    prefixIcon: Icon(Icons.person)),
+                                    prefixIcon: Icon(
+                                      Icons.person,
+                                      color: _focusNodeEmail.hasFocus
+                                          ? Colors.black
+                                          : null,
+                                    )),
                               ),
                             ),
                             Container(
                               margin: EdgeInsets.symmetric(vertical: 8.0),
                               child: TextFormField(
+                                focusNode: _focusNodePass,
                                 obscureText: isHidden,
                                 controller: passwordController,
                                 decoration: InputDecoration(
@@ -82,27 +116,29 @@ class _LoginPageState extends State<LoginPage> {
                                         color: Colors
                                             .black), // Focus olduğunda alt çizgi rengi
                                   ),
-                                  enabledBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.black)),
                                   labelText: "Şifre",
-                                  labelStyle: TextStyle(color: Colors.black),
+                                  labelStyle: TextStyle(
+                                      color: _focusNodePass.hasFocus
+                                          ? Colors.black
+                                          : null),
                                   hintText: "",
                                   prefixIcon: Icon(
                                     Icons.key,
-                                    color: Colors.black,
+                                    color: _focusNodePass.hasFocus
+                                        ? Colors.black
+                                        : null,
                                   ),
                                   suffixIcon: IconButton(
                                       onPressed: Chngvisibility,
                                       icon: isHidden
-                                          ? Icon(
-                                              Icons.visibility,
-                                              color: Colors.black,
-                                            )
-                                          : Icon(
-                                              Icons.visibility_off,
-                                              color: Colors.black,
-                                            )),
+                                          ? Icon(Icons.visibility,
+                                              color: _focusNodePass.hasFocus
+                                                  ? Colors.black
+                                                  : null)
+                                          : Icon(Icons.visibility_off,
+                                              color: _focusNodePass.hasFocus
+                                                  ? Colors.black
+                                                  : null)),
                                 ),
                               ),
                             ),

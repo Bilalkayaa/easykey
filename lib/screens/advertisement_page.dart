@@ -28,6 +28,7 @@ class _advertPageState extends State<advertPage> {
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('ads')
+            .where('isvisible', isEqualTo: "1")
             .orderBy('Timestamp', descending: true)
             .snapshots(),
         builder: (context, snapshot) {

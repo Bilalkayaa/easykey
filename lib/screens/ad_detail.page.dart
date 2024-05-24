@@ -117,10 +117,18 @@ class _adDetailState extends State<adDetail> {
               ],
             ),
             SizedBox(height: 8),
-            Text(
-              "${user?.Name} ${user?.Surname}",
-              style: TextStyle(
-                  color: CustomColors.primaryColor, fontSize: fontsize1),
+            Row(
+              children: [
+                Text(
+                  "İlan sahibi: ",
+                  style: TextStyle(fontSize: fontsize1),
+                ),
+                Text(
+                  "${(user?.Name)?.toUpperCase()} ${(user?.Surname)?.toUpperCase()}",
+                  style: TextStyle(
+                      color: CustomColors.primaryColor, fontSize: fontsize1),
+                ),
+              ],
             ),
 
             SizedBox(height: 8),
@@ -232,7 +240,9 @@ class _adDetailState extends State<adDetail> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => keycodePage(),
+                        builder: (context) => keycodePage(
+                            safeBoxNumber: widget.ad.safeBoxNumber ?? "",
+                            boxDoorNumber: widget.ad.boxDoorNumber ?? ""),
                       ));
                 },
                 label: Text("Ziyaret et!"),

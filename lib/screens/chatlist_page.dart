@@ -83,7 +83,7 @@ class _ChatListState extends State<ChatList> {
                       color: Colors.grey,
                       child: ListTile(
                         leading: CircleAvatar(
-                          child: Text(chatNames[index][0]),
+                          child: Text(chatNames[index][0].toUpperCase()),
                           backgroundColor: CustomColors.secondaryColor,
                         ),
                         title: Text(chatNames[index]),

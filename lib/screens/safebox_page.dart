@@ -22,9 +22,23 @@ class _safeBoxState extends State<safeBox> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text(
+              "Kasa Numarası Seçiniz.",
+              style: TextStyle(fontSize: 22),
+            ),
+            SizedBox(
+              height: 10,
+            ),
             Container(
               width: 150,
               child: DropdownButtonFormField(
+                decoration: InputDecoration(
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide:
+                            BorderSide(color: CustomColors.secondaryColor)),
+                    enabledBorder: UnderlineInputBorder(
+                        borderSide:
+                            BorderSide(color: CustomColors.secondaryColor))),
                 value: safeBoxNumber,
                 onChanged: (String? newValue) {
                   setState(() {
@@ -45,9 +59,26 @@ class _safeBoxState extends State<safeBox> {
                 icon: Icon(Icons.arrow_drop_down, color: Colors.black),
               ),
             ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              "Kasa Kapı Numarası Seçiniz.",
+              style: TextStyle(fontSize: 18),
+            ),
+            SizedBox(
+              height: 10,
+            ),
             Container(
               width: 150,
               child: DropdownButtonFormField(
+                decoration: InputDecoration(
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide:
+                            BorderSide(color: CustomColors.secondaryColor)),
+                    enabledBorder: UnderlineInputBorder(
+                        borderSide:
+                            BorderSide(color: CustomColors.secondaryColor))),
                 value: boxDoorNumber,
                 items: <String>[
                   '1',
@@ -68,19 +99,33 @@ class _safeBoxState extends State<safeBox> {
                 },
               ),
             ),
-            ElevatedButton(
-              onPressed: () async {
-                // Firestore koleksiyonunu ve sorguyu kullanarak belirli bir safeBoxNumber'ı ara
-                checkthebox();
-              },
-              child: _isLoading
-                  ? CircularProgressIndicator(
-                      color: CustomColors.secondaryColor,
-                    )
-                  : Text(
-                      "İlan ver",
-                    ),
+            SizedBox(
+              height: 10,
             ),
+            ElevatedButton(
+                onPressed: () async {
+                  if (boxDoorNumber == null && safeBoxNumber == null) {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text('Hata'),
+                        content: Text(
+                            'Kasa numarası veya Kasa kapı numarası boş olamaz!'),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: Text('Tamam'),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                  // Firestore koleksiyonunu ve sorguyu kullanarak belirli bir safeBoxNumber'ı ara
+                  checkthebox();
+                },
+                child: Text(
+                  "İlan ver",
+                )),
           ],
         ),
       ),
@@ -101,11 +146,9 @@ class _safeBoxState extends State<safeBox> {
       var doorNumber;
       if (boxDoorNumber == "1") {
         doorNumber = doc['boxdoornumber1'];
-      }
-      if (boxDoorNumber == "2") {
+      } else if (boxDoorNumber == "2") {
         doorNumber = doc['boxdoornumber2'];
-      }
-      if (boxDoorNumber == "3") {
+      } else if (boxDoorNumber == "3") {
         doorNumber = doc['boxdoornumber3'];
       }
 
@@ -115,7 +158,7 @@ class _safeBoxState extends State<safeBox> {
           context: context,
           builder: (context) => AlertDialog(
             title: Text('Hata'),
-            content: Text('Kasa dolu'),
+            content: Text('Seçmiş oldunuğunuz kasa dolu!'),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
@@ -125,29 +168,46 @@ class _safeBoxState extends State<safeBox> {
           ),
         );
         return;
-      }
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Uyarı"),
+              content: Text("Anahtarı kasaya bıraktığınızdan emin olun!"),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Dialogu kapat
+                  },
+                  child: Text("Tamam"),
+                ),
+              ],
+            );
+          },
+        );
+        // Eğer belirli bir safeBoxNumber bulunamadı veya boxDoorNumber 1 değilse, işlemi devam ettir
+        widget.onUploadPressed(safeBoxNumber!, boxDoorNumber!);
 
-      // Eğer belirli bir safeBoxNumber bulunamadı veya boxDoorNumber 1 değilse, işlemi devam ettir
-      widget.onUploadPressed(safeBoxNumber!, boxDoorNumber!);
-
-      // boxDoorNumber değerini 1'e ayarla
-      if (boxDoorNumber == "1") {
-        await FirebaseFirestore.instance
-            .collection('safebox')
-            .doc(doc.id)
-            .update({'boxdoornumber1': "1"});
-      }
-      if (boxDoorNumber == "2") {
-        await FirebaseFirestore.instance
-            .collection('safebox')
-            .doc(doc.id)
-            .update({'boxdoornumber2': "1"});
-      }
-      if (boxDoorNumber == "3") {
-        await FirebaseFirestore.instance
-            .collection('safebox')
-            .doc(doc.id)
-            .update({'boxdoornumber3': "1"});
+        // boxDoorNumber değerini 1'e ayarla
+        if (boxDoorNumber == "1") {
+          await FirebaseFirestore.instance
+              .collection('safebox')
+              .doc(doc.id)
+              .update({'boxdoornumber1': "1"});
+        }
+        if (boxDoorNumber == "2") {
+          await FirebaseFirestore.instance
+              .collection('safebox')
+              .doc(doc.id)
+              .update({'boxdoornumber2': "1"});
+        }
+        if (boxDoorNumber == "3") {
+          await FirebaseFirestore.instance
+              .collection('safebox')
+              .doc(doc.id)
+              .update({'boxdoornumber3': "1"});
+        }
       }
     }
   }
@@ -157,10 +217,9 @@ class _safeBoxState extends State<safeBox> {
       _isLoading = true;
     });
 
-    Future.delayed(Duration(seconds: 2), () {
-      setState(() {
-        _isLoading = false;
-      });
+    Future.delayed(Duration(seconds: 2), () {});
+    setState(() {
+      _isLoading = false;
     });
   }
 }

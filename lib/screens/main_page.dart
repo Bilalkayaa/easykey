@@ -46,11 +46,12 @@ class _MainPageState extends State<MainPage> {
             },
             child: Icon(Icons.add_rounded)),
         appBar: AppBar(
-          toolbarHeight: kToolbarHeight,
           actions: [
             IconButton(
-              splashColor: Colors.transparent,
-              icon: Icon(Icons.message),
+              icon: Icon(
+                Icons.message,
+                color: Colors.white,
+              ),
               onPressed: () {
                 Navigator.push(
                     context,
@@ -91,7 +92,7 @@ class _MainPageState extends State<MainPage> {
                   icon: Icon(Icons.home),
                 ),
                 Tab(
-                  text: "Favorilerim",
+                  text: "Favoriler",
                   icon: Icon(Icons.favorite),
                 ),
                 Tab(

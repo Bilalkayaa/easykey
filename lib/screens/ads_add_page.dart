@@ -217,17 +217,18 @@ class _addAddState extends State<addAdd> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ElevatedButton(
+                    ElevatedButton.icon(
                       onPressed: () async {
                         selectedImages.clear();
                         setState(() {});
                       },
-                      child: Text(
+                      icon: Icon(Icons.delete_rounded),
+                      label: Text(
                         "Fotoğrafları Temizle!",
                         style: TextStyle(color: Colors.red),
                       ),
                     ),
-                    ElevatedButton(
+                    ElevatedButton.icon(
                       onPressed: () async {
                         // selectedImages.clear();
 
@@ -237,11 +238,12 @@ class _addAddState extends State<addAdd> {
                           flagphoto = true;
                         });
                       },
-                      child: Text("Fotoğraf Seç"),
+                      icon: Icon(Icons.photo),
+                      label: Text("Fotoğraf Seç"),
                     ),
                   ],
                 ),
-                ElevatedButton(
+                ElevatedButton.icon(
                     onPressed: () {
                       if (!selectedImages.isEmpty &&
                           advertDescription.text != "" &&
@@ -283,11 +285,12 @@ class _addAddState extends State<addAdd> {
                                     Text('Lütfen boş alanları doldurunuz!')));
                       }
                     },
-                    child: uploading
+                    icon: Icon(Icons.arrow_circle_right_outlined),
+                    label: uploading
                         ? CircularProgressIndicator(
                             color: CustomColors.secondaryColor,
                           )
-                        : Text("İlan Ver"))
+                        : Text("Devam et"))
               ],
             ),
           ),
@@ -307,17 +310,16 @@ class _addAddState extends State<addAdd> {
 
   InputDecoration customInputDecoration({bool flag = false}) {
     return InputDecoration(
-        enabledBorder: OutlineInputBorder(
+        enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: Colors.black),
-          borderRadius: BorderRadius.circular(8.0),
         ),
         suffixText: flag ? "\u20BA" : "",
         suffixStyle:
             TextStyle(color: CustomColors.secondaryColor, fontSize: 20),
-        border: OutlineInputBorder(
+        border: UnderlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(color: CustomColors.secondaryColor)),
-        focusedBorder: OutlineInputBorder(
+        focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: CustomColors.secondaryColor)));
   }
 
@@ -375,6 +377,7 @@ class _addAddState extends State<addAdd> {
       number: number,
       safeBoxNumber: safeBoxNumber,
       boxDoorNumber: boxDoorNumber,
+      isvisible: "1",
     );
     setState(() {
       uploading = false;

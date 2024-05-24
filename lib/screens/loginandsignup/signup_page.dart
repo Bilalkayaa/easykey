@@ -19,9 +19,35 @@ class _SignupPageState extends State<SignupPage> {
     });
   }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _focusNodePass.addListener(() {
+      setState(() {});
+    });
+    _focusNodeEmail.addListener(() {
+      setState(() {});
+    });
+    _focusNodePhone.addListener(() {
+      setState(() {});
+    });
+  }
+
+  void dispose() {
+    _focusNodePass.dispose();
+    _focusNodeEmail.dispose();
+    _focusNodePhone.dispose();
+    super.dispose();
+  }
+
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
+
+  FocusNode _focusNodePass = FocusNode();
+  FocusNode _focusNodeEmail = FocusNode();
+  FocusNode _focusNodePhone = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -64,32 +90,65 @@ class _SignupPageState extends State<SignupPage> {
                               child: TextFormField(
                                 keyboardType: TextInputType.emailAddress,
                                 controller: emailController,
-                                focusNode: FocusNode(skipTraversal: false),
+                                focusNode: _focusNodeEmail,
                                 decoration: InputDecoration(
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors
+                                              .black), // Focus olduğunda alt çizgi rengi
+                                    ),
                                     hintText: "example@example.com",
                                     labelText: "Kullanıcı adını giriniz",
+                                    labelStyle: TextStyle(
+                                        color: _focusNodeEmail.hasFocus
+                                            ? Colors.black
+                                            : null),
                                     hintStyle: TextStyle(
                                         fontWeight: FontWeight.normal),
-                                    prefixIcon: Icon(Icons.person)),
+                                    prefixIcon: Icon(
+                                      Icons.person,
+                                      color: _focusNodeEmail.hasFocus
+                                          ? Colors.black
+                                          : null,
+                                    )),
                               ),
                             ),
                             Container(
                               margin: EdgeInsets.symmetric(vertical: 8.0),
                               child: TextFormField(
+                                focusNode: _focusNodePass,
                                 obscureText: isHidden,
                                 controller: passwordController,
                                 decoration: InputDecoration(
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors
+                                            .black), // Focus olduğunda alt çizgi rengi
+                                  ),
                                   hintText:
                                       "Şifreniz minimum 6 haneli olmalıdır.",
                                   labelText: "Şifrenizi giriniz",
+                                  labelStyle: TextStyle(
+                                      color: _focusNodePass.hasFocus
+                                          ? Colors.black
+                                          : null),
                                   hintStyle:
                                       TextStyle(fontWeight: FontWeight.normal),
-                                  prefixIcon: Icon(Icons.key),
+                                  prefixIcon: Icon(Icons.key,
+                                      color: _focusNodePass.hasFocus
+                                          ? Colors.black
+                                          : null),
                                   suffixIcon: IconButton(
                                       onPressed: Chngvisibility,
                                       icon: isHidden
-                                          ? Icon(Icons.visibility)
-                                          : Icon(Icons.visibility_off)),
+                                          ? Icon(Icons.visibility,
+                                              color: _focusNodePass.hasFocus
+                                                  ? Colors.black
+                                                  : null)
+                                          : Icon(Icons.visibility_off,
+                                              color: _focusNodePass.hasFocus
+                                                  ? Colors.black
+                                                  : null)),
                                 ),
                               ),
                             ),
@@ -98,17 +157,30 @@ class _SignupPageState extends State<SignupPage> {
                                   vertical:
                                       8.0), // Aralık eklemek için margin kullanıyoruz
                               child: TextFormField(
+                                focusNode: _focusNodePhone,
                                 controller: phoneController,
                                 keyboardType: TextInputType.number,
                                 maxLength: 11,
                                 decoration: InputDecoration(
-                                    prefixText: "+90",
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors
+                                              .black), // Focus olduğunda alt çizgi rengi
+                                    ),
+                                    prefixText: "(+90)",
                                     hintText:
-                                        "11 haneli telefon numaranızı giriniz.",
+                                        " 11 haneli telefon numaranızı giriniz.",
                                     labelText: "Telefon numarası",
+                                    labelStyle: TextStyle(
+                                        color: _focusNodePhone.hasFocus
+                                            ? Colors.black
+                                            : null),
                                     hintStyle: TextStyle(
                                         fontWeight: FontWeight.normal),
-                                    prefixIcon: Icon(Icons.phone)),
+                                    prefixIcon: Icon(Icons.phone,
+                                        color: _focusNodePhone.hasFocus
+                                            ? Colors.black
+                                            : null)),
                               ),
                             ),
                             Container(
