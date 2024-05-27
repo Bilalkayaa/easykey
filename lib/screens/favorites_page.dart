@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../models/ads.dart';
-import 'ad_detail.page.dart';
+import 'ad_detail_page.dart';
 
 class FavoritesPage extends StatefulWidget {
   final userData;
@@ -68,7 +68,8 @@ class _FavoritesPageState extends State<FavoritesPage> {
                     }
                     if (adSnapshot.hasError ||
                         !adSnapshot.hasData ||
-                        !adSnapshot.data!.exists) {
+                        !adSnapshot.data!.exists ||
+                        adSnapshot.data!['isvisible'] != "1") {
                       return SizedBox(); // Hata durumunda veya ilan bulunamazsa boş bir widget döndür
                     }
 

@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easykey/screens/ad_detail.page.dart';
+import 'package:easykey/screens/ad_detail_page.dart';
+import 'package:easykey/screens/deletead_code_page.dart';
+import 'package:easykey/screens/keycode_page.dart';
 import 'package:easykey/services/firebase_post_service.dart';
 import 'package:flutter/material.dart';
 
@@ -31,6 +33,7 @@ class _myAdsPageState extends State<myAdsPage> {
         stream: FirebaseFirestore.instance
             .collection('ads')
             .where('uid', isEqualTo: widget.id)
+            .where('isvisible', isEqualTo: "1")
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -87,11 +90,21 @@ class _myAdsPageState extends State<myAdsPage> {
                                           ),
                                           TextButton(
                                             onPressed: () {
-                                              // Firebase'den ilanı silme işlemi
-                                              _post.deleteAd(ad.aid);
-                                              _post.RemoveFromFavorites(ad.aid);
-                                              Navigator.of(context)
-                                                  .pop(); // Dialogu kapat
+                                              Navigator.pop(context);
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        deleteAdCode(
+                                                      safeBoxNumber:
+                                                          ad.safeBoxNumber ??
+                                                              "",
+                                                      boxDoorNumber:
+                                                          ad.boxDoorNumber ??
+                                                              "",
+                                                      adId: ad.aid ?? "",
+                                                    ),
+                                                  ));
                                             },
                                             child: Text("Evet"),
                                           ),

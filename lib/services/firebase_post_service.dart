@@ -77,13 +77,22 @@ class Postservice {
     }
   }
 
-  void deleteAd(String? adId) {
-    FirebaseFirestore.instance
-        .collection('ads')
-        .doc(adId)
-        .delete()
-        .then((value) => print('İlan silindi'))
-        .catchError((error) => print('Hata: $error'));
+  Future<void> deleteAd(String? adId) async {
+    // FirebaseFirestore.instance
+    //     .collection('ads')
+    //     .doc(adId)
+    //     .delete()
+    //     .then((value) => print('İlan silindi'))
+    //     .catchError((error) => print('Hata: $error'));
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    try {
+      await firestore.collection('ads').doc(adId).update({
+        'isvisible': "0",
+      });
+      print('Alan başarıyla güncellendi!');
+    } catch (e) {
+      print('Alan güncellenirken bir hata oluştu: $e');
+    }
   }
 
   void addToFavorites(context, dynamic aid, dynamic userDataid) {

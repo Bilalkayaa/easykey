@@ -18,12 +18,16 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _focusNodeEmail.addListener(() {
+      setState(() {});
+    });
     _focusNodePass.addListener(() {
       setState(() {});
     });
   }
 
   void dispose() {
+    _focusNodeEmail.dispose();
     _focusNodePass.dispose();
     super.dispose();
   }

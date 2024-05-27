@@ -3,6 +3,7 @@ import 'package:easykey/Custom/custom_color.dart';
 import 'package:easykey/screens/keycode_page.dart';
 import 'package:easykey/services/firebase_post_service.dart';
 import 'package:flutter/material.dart';
+import 'package:map_launcher/map_launcher.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../models/ads.dart';
@@ -233,20 +234,45 @@ class _adDetailState extends State<adDetail> {
                 ),
               ],
             ),
-            Center(
-              child: ElevatedButton.icon(
-                icon: Icon(Icons.key),
-                onPressed: () async {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => keycodePage(
-                            safeBoxNumber: widget.ad.safeBoxNumber ?? "",
-                            boxDoorNumber: widget.ad.boxDoorNumber ?? ""),
-                      ));
-                },
-                label: Text("Ziyaret et!"),
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton.icon(
+                  icon: Icon(Icons.key),
+                  onPressed: () async {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => keycodePage(
+                              safeBoxNumber: widget.ad.safeBoxNumber ?? "",
+                              boxDoorNumber: widget.ad.boxDoorNumber ?? ""),
+                        ));
+                  },
+                  label: Text("Ziyaret et!"),
+                ),
+                ElevatedButton.icon(
+                  icon: Icon(Icons.location_on),
+                  onPressed: () async {
+                    final availableMap = await MapLauncher.installedMaps;
+
+                    if (widget.ad.safeBoxNumber == "1001") {
+                      await availableMap.first.showMarker(
+                          coords: Coords(41.095170, 28.865339),
+                          title: "1001 Numaralı Kasa");
+                    } else if (widget.ad.safeBoxNumber == "1002") {
+                      await availableMap.first.showMarker(
+                          coords: Coords(40.8724088, 29.2570002),
+                          title: "1002 Numaralı Kasa");
+                    } else if (widget.ad.safeBoxNumber == "1003") {
+                      await availableMap.first.showMarker(
+                          coords: Coords(41.0060047, 28.8851437),
+                          title: "1003 Numaralı Kasa");
+                    }
+                    ;
+                  },
+                  label: Text("Yol tarifi al"),
+                ),
+              ],
             ),
           ],
         ),

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easykey/screens/ad_detail.page.dart';
+import 'package:easykey/screens/ad_detail_page.dart';
 import 'package:flutter/material.dart';
 
 import '../models/ads.dart';

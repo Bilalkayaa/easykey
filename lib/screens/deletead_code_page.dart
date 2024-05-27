@@ -1,35 +1,42 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:easykey/services/firebase_post_service.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
-class keycodePage extends StatefulWidget {
-  keycodePage(
-      {super.key, required this.safeBoxNumber, required this.boxDoorNumber});
+class deleteAdCode extends StatefulWidget {
+  deleteAdCode(
+      {super.key,
+      required this.safeBoxNumber,
+      required this.boxDoorNumber,
+      required this.adId});
   String safeBoxNumber;
 
   String boxDoorNumber;
+  String adId;
   @override
-  State<keycodePage> createState() => _keycodePageState();
+  State<deleteAdCode> createState() => _deleteAdCodeState();
 }
 
-class _keycodePageState extends State<keycodePage> {
+class _deleteAdCodeState extends State<deleteAdCode> {
   late DatabaseReference _dbRef;
-
   late DatabaseReference _boolRef;
   late Future<void> _initFuture;
+
+  Postservice _post = Postservice();
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
     _dbRef = FirebaseDatabase.instance.ref().child(
-        "safeboxes/${widget.safeBoxNumber}/${widget.boxDoorNumber}/keycode");
+        "safeboxes/${widget.safeBoxNumber}/${widget.boxDoorNumber}/deletecode");
 
     _boolRef = FirebaseDatabase.instance.ref().child(
-        "safeboxes/${widget.safeBoxNumber}/${widget.boxDoorNumber}/bool");
+        "safeboxes/${widget.safeBoxNumber}/${widget.boxDoorNumber}/deletebool");
     _initFuture = _initialize();
   }
 
@@ -115,7 +122,35 @@ class _keycodePageState extends State<keycodePage> {
                     } else {
                       Object? map = snapshot.data!.snapshot.value as dynamic;
 
-                      return Text(map == "1" ? "Kasa başarıyla açıldı" : "");
+                      if (map == "1") {
+                        Future.microtask(() async {
+                          await _post.deleteAd(widget.adId);
+                          Navigator.pop(context);
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('Bilgilendirme'),
+                                content: Text(
+                                    'İlanınız başarıyla silindi. Anahtarınızı almayı unutmayınız!'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pop(); // Dialogu kapat
+                                    },
+                                    child: Text('Tamam'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        });
+
+                        return SizedBox.shrink(); // Boş bir widget döndür
+                      } else {
+                        return Text("Kodu girmeniz bekleniyor");
+                      }
                     }
                   },
                 ),
