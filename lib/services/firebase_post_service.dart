@@ -15,6 +15,7 @@ class Postservice {
     required String safeBoxNumber,
     required String boxDoorNumber,
     required String isvisible,
+    required String status,
   }) async {
     try {
       final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -35,9 +36,9 @@ class Postservice {
         'safeBoxNumber': safeBoxNumber,
         'boxDoorNumber': boxDoorNumber,
         'isvisible': "1",
+        'status': status,
       });
     } catch (e) {
-      // Kayıt işlemi sırasında oluşabilecek hataları ele alın
       print("Kullanıcı kaydı sırasında hata oluştu: $e");
     }
   }

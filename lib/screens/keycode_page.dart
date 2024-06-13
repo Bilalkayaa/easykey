@@ -1,30 +1,40 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:easykey/models/ads.dart';
+import 'package:easykey/services/firebase_visit_service.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class keycodePage extends StatefulWidget {
   keycodePage(
-      {super.key, required this.safeBoxNumber, required this.boxDoorNumber});
+      {super.key,
+      required this.safeBoxNumber,
+      required this.boxDoorNumber,
+      required this.userData,
+      required this.ad});
   String safeBoxNumber;
-
+  final userData;
+  final ads ad;
   String boxDoorNumber;
   @override
   State<keycodePage> createState() => _keycodePageState();
 }
 
-class _keycodePageState extends State<keycodePage> {
+class _keycodePageState extends State<keycodePage> with WidgetsBindingObserver {
   late DatabaseReference _dbRef;
 
   late DatabaseReference _boolRef;
   late Future<void> _initFuture;
+
+  Visitservice _visitservice = Visitservice();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
+    WidgetsBinding.instance.addObserver(this);
     _dbRef = FirebaseDatabase.instance.ref().child(
         "safeboxes/${widget.safeBoxNumber}/${widget.boxDoorNumber}/keycode");
 
@@ -39,6 +49,30 @@ class _keycodePageState extends State<keycodePage> {
     super.dispose();
     _dbRef.set("");
     _boolRef.set("");
+
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached) {
+      _resetDatabase();
+    } else if (state == AppLifecycleState.resumed) {
+      setState(() {
+        _initialize();
+      });
+    }
+  }
+
+  Future<void> _resetDatabase() async {
+    try {
+      await _dbRef.set("");
+      await _boolRef.set("");
+      print("Veritabanı başarıyla sıfırlandı.");
+    } catch (e) {
+      print("Veritabanı sıfırlama sırasında hata oluştu: $e");
+    }
   }
 
   @override
@@ -115,7 +149,37 @@ class _keycodePageState extends State<keycodePage> {
                     } else {
                       Object? map = snapshot.data!.snapshot.value as dynamic;
 
-                      return Text(map == "1" ? "Kasa başarıyla açıldı" : "");
+                      if (map == "1") {
+                        Future.microtask(() async {
+                          await _visitservice.registervisitor(
+                              visitorId: widget.userData['id'],
+                              visitedadId: widget.ad.aid ?? "",
+                              ownerId: widget.ad.uid ?? "");
+                          Navigator.pop(context);
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('Bilgilendirme'),
+                                content: Text(
+                                    'Kasa açılmıştır! Lütfen kasayı açık bırakın.Geziniz bittikten sonra anahtarı yerine bırakınız'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pop(); // Dialogu kapat
+                                    },
+                                    child: Text('Tamam'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        });
+                        return SizedBox.shrink();
+                      } else {
+                        return Text("Kodu girmeniz bekleniyor");
+                      }
                     }
                   },
                 ),

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easykey/Custom/custom_color.dart';
+import 'package:easykey/custom/custom_color.dart';
 import 'package:easykey/screens/chat_page.dart';
 import 'package:flutter/material.dart';
 
@@ -47,6 +47,7 @@ class _ChatListState extends State<ChatList> {
             QuerySnapshot<Object?>? querySnapshot = snapshot.data;
             List<String> chatIds = [];
             List<String> chatNames = [];
+
             querySnapshot?.docs.forEach((doc) async {
               chatIds.add(doc.id);
               chatNames.add((await getUserNames(doc.id)));
@@ -111,6 +112,7 @@ class _ChatListState extends State<ChatList> {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     String? userName;
+    String? userSurname;
 
     // Her bir kullanıcı kimliği için Firestore'dan belgeleri al
 
@@ -125,11 +127,12 @@ class _ChatListState extends State<ChatList> {
 
       if (userData.containsKey('Name')) {
         userName = userData['Name'];
+        userSurname = userData['Surname'];
       }
     }
 
     print(userName);
-    return userName ?? "asdqw";
+    return "$userName $userSurname";
   }
 
   Stream<QuerySnapshot> _secondStream(List<String> chatIds) async* {

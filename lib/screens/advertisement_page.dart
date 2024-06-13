@@ -29,7 +29,7 @@ class _advertPageState extends State<advertPage> {
         stream: FirebaseFirestore.instance
             .collection('ads')
             .where('isvisible', isEqualTo: "1")
-            .orderBy('Timestamp', descending: true)
+            // .orderBy('Timestamp', descending: true)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {

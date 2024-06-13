@@ -1,3 +1,4 @@
+import 'package:easykey/screens/loginandsignup/login_page.dart';
 import 'package:flutter/material.dart';
 
 import '../models/user.dart';
@@ -27,7 +28,7 @@ class _profilePageState extends State<profilePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
-              height: 90,
+              height: MediaQuery.of(context).size.height / 8,
             ),
             Text(
               'İsim',
@@ -38,7 +39,8 @@ class _profilePageState extends State<profilePage> {
             ),
             SizedBox(height: 10),
             Text(
-              widget.userData['Name'] ?? 'Bilinmeyen',
+              widget.userData['Name'] + " " + widget.userData['Surname'] ??
+                  'Bilinmeyen',
               style: TextStyle(
                 fontSize: 18,
                 color: Colors.grey[600],
@@ -76,6 +78,16 @@ class _profilePageState extends State<profilePage> {
                 color: Colors.grey[600],
               ),
             ),
+            SizedBox(height: 10),
+            ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => LoginPage(),
+                      ));
+                },
+                label: Text("Çıkış Yap"))
           ],
         ),
       ),

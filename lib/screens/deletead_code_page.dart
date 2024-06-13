@@ -20,7 +20,8 @@ class deleteAdCode extends StatefulWidget {
   State<deleteAdCode> createState() => _deleteAdCodeState();
 }
 
-class _deleteAdCodeState extends State<deleteAdCode> {
+class _deleteAdCodeState extends State<deleteAdCode>
+    with WidgetsBindingObserver {
   late DatabaseReference _dbRef;
   late DatabaseReference _boolRef;
   late Future<void> _initFuture;
@@ -31,7 +32,7 @@ class _deleteAdCodeState extends State<deleteAdCode> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
+    WidgetsBinding.instance.addObserver(this);
     _dbRef = FirebaseDatabase.instance.ref().child(
         "safeboxes/${widget.safeBoxNumber}/${widget.boxDoorNumber}/deletecode");
 
@@ -46,6 +47,28 @@ class _deleteAdCodeState extends State<deleteAdCode> {
     super.dispose();
     _dbRef.set("");
     _boolRef.set("");
+  }
+
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached) {
+      _resetDatabase();
+    } else if (state == AppLifecycleState.resumed) {
+      setState(() {
+        _initialize();
+      });
+    }
+  }
+
+  Future<void> _resetDatabase() async {
+    try {
+      await _dbRef.set("");
+      await _boolRef.set("");
+      print("Veritabanı başarıyla sıfırlandı.");
+    } catch (e) {
+      print("Veritabanı sıfırlama sırasında hata oluştu: $e");
+    }
   }
 
   @override

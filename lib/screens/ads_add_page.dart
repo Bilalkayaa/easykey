@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../Custom/custom_color.dart';
+import '../custom/custom_color.dart';
 
 class addAdd extends StatefulWidget {
   const addAdd({super.key, required this.userData});
@@ -39,6 +39,8 @@ String? safeBoxNumber;
 
 String? boxDoorNumber;
 
+String? status;
+
 Postservice _post = Postservice();
 
 class _addAddState extends State<addAdd> {
@@ -53,6 +55,7 @@ class _addAddState extends State<addAdd> {
     Address.clear();
     advertFloor.clear();
     advertNumber.clear();
+    status = null;
     super.dispose();
   }
 
@@ -162,6 +165,43 @@ class _addAddState extends State<addAdd> {
                   minLines: 1,
                   maxLines: 1,
                 ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Durumu",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  child: DropdownButtonFormField(
+                    decoration: InputDecoration(
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: CustomColors.secondaryColor)),
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black))),
+                    value: status,
+                    items: <String>[
+                      'Satılık',
+                      'Kiralık',
+                    ].map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    icon: Icon(Icons.arrow_drop_down, color: Colors.black),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        status = newValue ?? "denemevalue2";
+                      });
+                      print('Yeni değer seçildi: $newValue');
+                    },
+                  ),
+                ),
                 selectedImages.isEmpty
                     ? SizedBox(
                         child: Text(
@@ -217,29 +257,33 @@ class _addAddState extends State<addAdd> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ElevatedButton.icon(
-                      onPressed: () async {
-                        selectedImages.clear();
-                        setState(() {});
-                      },
-                      icon: Icon(Icons.delete_rounded),
-                      label: Text(
-                        "Fotoğrafları Temizle!",
-                        style: TextStyle(color: Colors.red),
+                    Flexible(
+                      child: ElevatedButton.icon(
+                        onPressed: () async {
+                          selectedImages.clear();
+                          setState(() {});
+                        },
+                        icon: Icon(Icons.delete_rounded),
+                        label: Text(
+                          "Fotoğrafları Temizle!",
+                          style: TextStyle(color: Colors.red),
+                        ),
                       ),
                     ),
-                    ElevatedButton.icon(
-                      onPressed: () async {
-                        // selectedImages.clear();
+                    Flexible(
+                      child: ElevatedButton.icon(
+                        onPressed: () async {
+                          // selectedImages.clear();
 
-                        getImages();
+                          getImages();
 
-                        setState(() {
-                          flagphoto = true;
-                        });
-                      },
-                      icon: Icon(Icons.photo),
-                      label: Text("Fotoğraf Seç"),
+                          setState(() {
+                            flagphoto = true;
+                          });
+                        },
+                        icon: Icon(Icons.photo),
+                        label: Text("Fotoğraf Seç"),
+                      ),
                     ),
                   ],
                 ),
@@ -254,7 +298,8 @@ class _addAddState extends State<addAdd> {
                           advertFloor.text != "" &&
                           isNumeric(advertPrice.text) &&
                           isNumeric(advertNumber.text) &&
-                          isNumeric(advertFloor.text)) {
+                          isNumeric(advertFloor.text) &&
+                          status != "") {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -268,16 +313,10 @@ class _addAddState extends State<addAdd> {
                                         advertFloor.text,
                                         advertNumber.text,
                                         safeBoxNumber,
-                                        boxDoorNumber);
+                                        boxDoorNumber,
+                                        status ?? "Satılık");
                                   })),
                         );
-                        // _uploadAds(
-                        //     Address.text,
-                        //     advertTitle.text,
-                        //     advertDescription.text,
-                        //     advertPrice.text,
-                        //     advertFloor.text,
-                        //     advertNumber.text);
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -350,7 +389,8 @@ class _addAddState extends State<addAdd> {
       String floor,
       String number,
       String safeBoxNumber,
-      String boxDoorNumber) async {
+      String boxDoorNumber,
+      String status) async {
     setState(() {
       uploading = true;
     });
@@ -378,6 +418,7 @@ class _addAddState extends State<addAdd> {
       safeBoxNumber: safeBoxNumber,
       boxDoorNumber: boxDoorNumber,
       isvisible: "1",
+      status: status,
     );
     setState(() {
       uploading = false;

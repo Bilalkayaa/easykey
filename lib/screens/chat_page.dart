@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easykey/Custom/custom_color.dart';
+import 'package:easykey/custom/custom_color.dart';
 import 'package:easykey/models/message.dart';
 import 'package:flutter/material.dart';
 
@@ -84,10 +84,10 @@ class _chatPageState extends State<chatPage> {
                               ? Alignment.centerRight
                               : Alignment.centerLeft,
                           child: Container(
-                            width: message.length.toDouble() * 9 + 45 >
+                            width: message.length.toDouble() * 9 + 55 >
                                     MediaQuery.of(context).size.width * 0.8
                                 ? MediaQuery.of(context).size.width * 0.8
-                                : message.length.toDouble() * 9 + 45,
+                                : message.length.toDouble() * 9 + 55,
                             child: Card(
                                 color: myMessage ? Colors.green : Colors.grey,
                                 shape: RoundedRectangleBorder(

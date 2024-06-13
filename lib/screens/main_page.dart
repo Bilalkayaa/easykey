@@ -1,4 +1,4 @@
-import 'package:easykey/Custom/custom_color.dart';
+import 'package:easykey/custom/custom_color.dart';
 import 'package:easykey/screens/ads_add_page.dart';
 import 'package:easykey/screens/advertisement_page.dart';
 import 'package:easykey/screens/chatlist_page.dart';

@@ -2,7 +2,7 @@ import 'package:easykey/screens/loginandsignup/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../Custom/custom_color.dart';
+import '../../custom/custom_color.dart';
 import '../../controllers/extract_data_controller.dart';
 import '../../services/firebase_auth_service.dart';
 

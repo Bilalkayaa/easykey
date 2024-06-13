@@ -8,7 +8,7 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../Custom/custom_color.dart';
+import '../custom/custom_color.dart';
 
 class ExtractDataController extends GetxController {
   RxList<String> imagePaths = <String>[].obs;

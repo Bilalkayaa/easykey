@@ -15,18 +15,15 @@ class AuthService {
       if (userCredential.user != null) {
         String uid = userCredential.user!.uid;
         FirebaseFirestore firestore = FirebaseFirestore.instance;
-        // Belirli bir koleksiyondaki belgeleri sorgula
+
         QuerySnapshot querySnapshot = await firestore
-            .collection('users') // Koleksiyon adını buraya girin
+            .collection('users')
             .where('id', isEqualTo: uid)
             .get();
 
-        // Sorgu sonucunda elde edilen belgeleri işle
         querySnapshot.docs.forEach((doc) {
-          // Belge verilerini al
           Map<String, dynamic>? userData = doc.data() as Map<String, dynamic>?;
-          // İşlem yapılacak verileri burada kullanabilirsiniz
-          // Örneğin, bu belgenin id'sini almak için: doc.id
+
           Navigator.push(
               context,
               MaterialPageRoute(
@@ -35,8 +32,6 @@ class AuthService {
                         userData: userData,
                       )));
         });
-
-        print(uid);
       }
     } catch (e) {
       Get.snackbar('Hata', "Girdiğiniz bilgilerin doğruluğundan emin olun!",
@@ -64,7 +59,6 @@ class AuthService {
       if (userCredential.user != null) {
         await registerUser(
             email: email,
-            password: password,
             TCKN: TCKN,
             name: name,
             surname: surname,
@@ -81,7 +75,6 @@ class AuthService {
 
   Future<void> registerUser(
       {required String email,
-      required String password,
       required String TCKN,
       required String name,
       required String surname,
@@ -94,7 +87,6 @@ class AuthService {
       final FirebaseFirestore _firestore = FirebaseFirestore.instance;
       await _firestore.collection('users').doc(uid).set({
         "Email": email,
-        "Password": password,
         "TCKN": TCKN,
         "Name": name,
         "Surname": surname,

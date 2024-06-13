@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
-import '../../Custom/custom_color.dart';
+import '../../custom/custom_color.dart';
 import '../../controllers/extract_data_controller.dart';
 import 'id_detail_screen.dart';
 

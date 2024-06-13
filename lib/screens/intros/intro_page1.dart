@@ -1,4 +1,4 @@
-import 'package:easykey/Custom/custom_color.dart';
+import 'package:easykey/custom/custom_color.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 

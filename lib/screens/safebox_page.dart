@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easykey/Custom/custom_color.dart';
+import 'package:easykey/custom/custom_color.dart';
 import 'package:flutter/material.dart';
 
 class safeBox extends StatefulWidget {
@@ -13,7 +13,6 @@ class safeBox extends StatefulWidget {
 class _safeBoxState extends State<safeBox> {
   String? safeBoxNumber;
   String? boxDoorNumber;
-  bool _isLoading = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,6 +21,14 @@ class _safeBoxState extends State<safeBox> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text(
+              "Lütfen anahtarınızı doğru kasaya bıraktıntan sonra doldurunuz!",
+              style: TextStyle(fontSize: 22, color: Colors.red),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(
+              height: 10,
+            ),
             Text(
               "Kasa Numarası Seçiniz.",
               style: TextStyle(fontSize: 22),
@@ -213,13 +220,9 @@ class _safeBoxState extends State<safeBox> {
   }
 
   void _handleButtonClick() {
-    setState(() {
-      _isLoading = true;
-    });
+    setState(() {});
 
     Future.delayed(Duration(seconds: 2), () {});
-    setState(() {
-      _isLoading = false;
-    });
+    setState(() {});
   }
 }

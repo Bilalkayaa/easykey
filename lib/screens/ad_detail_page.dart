@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easykey/Custom/custom_color.dart';
+import 'package:easykey/custom/custom_color.dart';
 import 'package:easykey/screens/keycode_page.dart';
 import 'package:easykey/services/firebase_post_service.dart';
 import 'package:flutter/material.dart';
@@ -186,6 +186,13 @@ class _adDetailState extends State<adDetail> {
               height: 10,
             ),
             Text(
+              'Durumu: ${widget.ad.status ?? ""}',
+              style: TextStyle(fontSize: fontsize1),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
               "İlan açıklaması:",
               style:
                   TextStyle(fontWeight: FontWeight.bold, fontSize: fontsize2),
@@ -244,11 +251,13 @@ class _adDetailState extends State<adDetail> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => keycodePage(
+                              ad: widget.ad,
+                              userData: widget.userData,
                               safeBoxNumber: widget.ad.safeBoxNumber ?? "",
                               boxDoorNumber: widget.ad.boxDoorNumber ?? ""),
                         ));
                   },
-                  label: Text("Ziyaret et!"),
+                  label: Text("Ziyaret Et!"),
                 ),
                 ElevatedButton.icon(
                   icon: Icon(Icons.location_on),
@@ -270,7 +279,7 @@ class _adDetailState extends State<adDetail> {
                     }
                     ;
                   },
-                  label: Text("Yol tarifi al"),
+                  label: Text("Yol Tarifi Al"),
                 ),
               ],
             ),

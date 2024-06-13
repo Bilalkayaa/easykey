@@ -160,7 +160,7 @@ class _SignupPageState extends State<SignupPage> {
                                 focusNode: _focusNodePhone,
                                 controller: phoneController,
                                 keyboardType: TextInputType.number,
-                                maxLength: 11,
+                                maxLength: 10,
                                 decoration: InputDecoration(
                                     focusedBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
@@ -223,7 +223,7 @@ class _SignupPageState extends State<SignupPage> {
                                         if (emailController.text.isEmpty ||
                                             passwordController.text.isEmpty ||
                                             phoneController.text.isEmpty ||
-                                            phoneController.text.length < 11 ||
+                                            phoneController.text.length < 10 ||
                                             passwordController.text.length <
                                                 6 ||
                                             !isEmailValid(
