@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easykey/screens/ad_detail_page.dart';
 import 'package:easykey/screens/deletead_code_page.dart';
-import 'package:easykey/screens/keycode_page.dart';
-import 'package:easykey/services/firebase_post_service.dart';
 import 'package:flutter/material.dart';
 
 import '../models/ads.dart';
@@ -25,7 +23,6 @@ class _myAdsPageState extends State<myAdsPage> {
     super.initState();
   }
 
-  Postservice _post = Postservice();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
