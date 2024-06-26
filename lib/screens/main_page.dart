@@ -8,8 +8,8 @@ import 'package:easykey/screens/profile_page.dart';
 import 'package:flutter/material.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({super.key, required this.uid, required this.userData});
-  final String uid;
+  const MainPage({super.key, required this.userData});
+
   final userData;
   @override
   State<MainPage> createState() => _MainPageState();
@@ -72,8 +72,8 @@ class _MainPageState extends State<MainPage> {
         body: TabBarView(children: [
           advertPage(userData: widget.userData),
           FavoritesPage(userData: widget.userData),
-          myAdsPage(id: widget.uid, userData: widget.userData),
-          profilePage(uid: widget.uid, userData: widget.userData)
+          myAdsPage(userData: widget.userData),
+          profilePage(userData: widget.userData)
         ]),
         bottomNavigationBar: BottomAppBar(
           elevation: 99,

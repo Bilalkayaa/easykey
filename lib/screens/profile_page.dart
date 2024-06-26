@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import '../models/user.dart';
 
 class profilePage extends StatefulWidget {
-  const profilePage({super.key, required this.uid, required this.userData});
-  final String uid;
+  const profilePage({super.key, required this.userData});
+
   final Map<String, dynamic> userData;
 
   @override

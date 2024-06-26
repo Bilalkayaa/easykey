@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easykey/bloc/favs_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../models/ads.dart';
 import 'ad_detail_page.dart';
@@ -81,13 +83,18 @@ class _FavoritesPageState extends State<FavoritesPage> {
                       margin: EdgeInsets.all(5),
                       child: ListTile(
                         onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => adDetail(
-                                    ad: ad,
-                                    userData: widget.userData,
-                                  )),
-                        ),
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BlocProvider(
+                                create: (context) => FavsBloc(
+                                    firestore: FirebaseFirestore.instance,
+                                    userId: widget.userData['id']),
+                                child: adDetail(
+                                  ad: ad,
+                                  userData: widget.userData,
+                                ),
+                              ),
+                            )),
                         contentPadding: EdgeInsets.all(0),
                         title: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

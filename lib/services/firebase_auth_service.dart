@@ -28,7 +28,6 @@ class AuthService {
               context,
               MaterialPageRoute(
                   builder: (context) => MainPage(
-                        uid: uid,
                         userData: userData,
                       )));
         });
@@ -98,7 +97,6 @@ class AuthService {
         "Favs": []
       });
     } catch (e) {
-      // Kayıt işlemi sırasında oluşabilecek hataları ele alın
       print("Kullanıcı kaydı sırasında hata oluştu: $e");
     }
   }

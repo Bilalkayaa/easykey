@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easykey/bloc/favs_bloc.dart';
+import 'package:easykey/bloc/favs_event.dart';
+import 'package:easykey/bloc/favs_state.dart';
 import 'package:easykey/custom/custom_color.dart';
 import 'package:easykey/screens/keycode_page.dart';
-import 'package:easykey/services/firebase_post_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -31,9 +34,6 @@ class _adDetailState extends State<adDetail> {
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-
-    _fetchUserData();
     super.didChangeDependencies();
   }
 
@@ -42,12 +42,11 @@ class _adDetailState extends State<adDetail> {
     print('dispose çağrıldı');
   }
 
-  Postservice _post = Postservice();
   @override
   Widget build(BuildContext context) {
     const double fontsize1 = 16;
     const double fontsize2 = 26;
-
+    final favsBloc = BlocProvider.of<FavsBloc>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('İlan Detayı'),
@@ -91,30 +90,49 @@ class _adDetailState extends State<adDetail> {
                     ),
                   ),
                 ),
-                IconButton(
-                    onPressed: () {
-                      if (isfav == true) {
-                        setState(() {
-                          isfav = false;
+                BlocBuilder<FavsBloc, FavsState>(
+                  builder: (context, state) {
+                    var isFavorite = state.favorites.contains(widget.ad.aid);
+                    return IconButton(
+                      icon: Icon(
+                        color: isFavorite ? Colors.red : null,
+                        isFavorite ? Icons.favorite : Icons.favorite_border,
+                      ),
+                      onPressed: () {
+                        if (isFavorite) {
+                          favsBloc
+                              .add(RemoveFromFavorites(widget.ad.aid ?? ""));
+                        } else {
+                          favsBloc.add(AddToFavorites(widget.ad.aid ?? ""));
+                        }
+                      },
+                    );
+                    // return IconButton(
+                    //     onPressed: () {
+                    //       if (isfav == true) {
+                    //         setState(() {
+                    //           isfav = false;
 
-                          _post.removeFromFavorites(
-                              context, widget.ad.aid, widget.userData['id']);
-                        });
-                      } else {
-                        setState(() {
-                          isfav = true;
+                    //           _post.removeFromFavorites(context, widget.ad.aid,
+                    //               widget.userData['id']);
+                    //         });
+                    //       } else {
+                    //         setState(() {
+                    //           isfav = true;
 
-                          _post.addToFavorites(
-                              context, widget.ad.aid, widget.userData['id']);
-                        });
-                      }
-                    },
-                    icon: isfav
-                        ? Icon(
-                            Icons.favorite,
-                            color: Colors.red,
-                          )
-                        : Icon(Icons.favorite_border))
+                    //           _post.addToFavorites(context, widget.ad.aid,
+                    //               widget.userData['id']);
+                    //         });
+                    //       }
+                    //     },
+                    //     icon: isfav
+                    //         ? Icon(
+                    //             Icons.favorite,
+                    //             color: Colors.red,
+                    //           )
+                    //         : Icon(Icons.favorite_border));
+                  },
+                )
               ],
             ),
             SizedBox(height: 8),
@@ -287,56 +305,6 @@ class _adDetailState extends State<adDetail> {
         ),
       ),
     );
-  }
-
-  Future<void> _fetchUserData() async {
-    try {
-      DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(widget.userData['id'])
-          .get();
-
-      if (userSnapshot.exists) {
-        // Favs alanı var mı kontrol et
-        if (widget.userData.containsKey('Favs')) {
-          var favs = widget.userData['Favs'];
-
-          // Kontrol etmek istediğiniz değer
-          var valueToCheck = widget.ad.aid ?? "";
-          print("durak1");
-          // Favs listesinde belirli bir değer var mı kontrol et
-          if (favs.contains(valueToCheck) == true) {
-            setState(() {
-              print("durak2");
-              // _userData = 'Favs alanı içinde $valueToCheck bulundu.';
-              isfav = true;
-              print(isfav);
-            });
-          } else {
-            setState(() {
-              print("durak3");
-              // _userData = 'Favs alanı içinde $valueToCheck bulunamadı.';
-              isfav = false;
-              print("{$isfav}asdasd");
-            });
-          }
-        } else {
-          // Favs alanında değer yok
-          setState(() {
-            print("a");
-            // _userData = 'Favs alanı bulunamadı.';
-          });
-        }
-      } else {
-        // Kullanıcının dökümanı yok
-        setState(() {
-          print('b');
-          // _userData = 'Kullanıcı bulunamadı.';
-        });
-      }
-    } catch (error) {
-      print('Hata oluştu: $error');
-    }
   }
 
   Future<void> getUserFromFirestore(String? userId) async {

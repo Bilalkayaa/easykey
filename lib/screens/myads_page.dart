@@ -1,13 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easykey/bloc/favs_bloc.dart';
 import 'package:easykey/screens/ad_detail_page.dart';
 import 'package:easykey/screens/deletead_code_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../models/ads.dart';
 
 class myAdsPage extends StatefulWidget {
-  const myAdsPage({super.key, required this.id, required this.userData});
-  final String id;
+  const myAdsPage({super.key, required this.userData});
+
   final userData;
   @override
   State<myAdsPage> createState() => _myAdsPageState();
@@ -29,7 +31,7 @@ class _myAdsPageState extends State<myAdsPage> {
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('ads')
-            .where('uid', isEqualTo: widget.id)
+            .where('uid', isEqualTo: widget.userData['id'])
             .where('isvisible', isEqualTo: "1")
             .snapshots(),
         builder: (context, snapshot) {
@@ -114,10 +116,17 @@ class _myAdsPageState extends State<myAdsPage> {
                                   onTap: () => Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => adDetail(
-                                                ad: ad,
-                                                userData: widget.userData,
-                                              ))),
+                                        builder: (context) => BlocProvider(
+                                          create: (context) => FavsBloc(
+                                              firestore:
+                                                  FirebaseFirestore.instance,
+                                              userId: widget.userData['id']),
+                                          child: adDetail(
+                                            ad: ad,
+                                            userData: widget.userData,
+                                          ),
+                                        ),
+                                      )),
                                   contentPadding: EdgeInsets.all(0),
                                   title: Column(
                                     crossAxisAlignment:
