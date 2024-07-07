@@ -1,6 +1,9 @@
 # easykey
 
-A new Flutter project.
+Uygulamaya giriş yaparken
+w@w.com q@q.com a@a.com//email
+123456 //password
+kullanılabilir.
 
 ## Getting Started
 
