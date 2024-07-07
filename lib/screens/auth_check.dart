@@ -38,7 +38,7 @@ class AuthCheck extends StatelessWidget {
               } else if (userSnapshot.hasData) {
                 return MainPage(userData: userSnapshot.data!);
               } else {
-                return LoginPage(); // Kullanıcı verisi çekilemezse giriş sayfasına yönlendir
+                return LoginPage(); // Kullanıcı verisi çekilemezse giriş sayfasına yönlendir.
               }
             },
           );
