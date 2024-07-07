@@ -1,4 +1,4 @@
-import 'package:easykey/screens/loginandsignup/login_page.dart';
+import 'package:easykey/screens/auth_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
       ),
-      home: showOnboarding ? OnBoarding() : LoginPage(),
+      home: showOnboarding ? OnBoarding() : AuthCheck(),
     );
   }
 }

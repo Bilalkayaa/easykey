@@ -1,7 +1,6 @@
 import 'package:easykey/screens/loginandsignup/login_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-import '../models/user.dart';
 
 class profilePage extends StatefulWidget {
   const profilePage({super.key, required this.userData});
@@ -13,13 +12,6 @@ class profilePage extends StatefulWidget {
 }
 
 class _profilePageState extends State<profilePage> {
-  late User user;
-  @override
-  void initState() {
-    super.initState();
-    user = User.fromMap(widget.userData);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,13 +72,14 @@ class _profilePageState extends State<profilePage> {
             ),
             SizedBox(height: 10),
             ElevatedButton.icon(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => LoginPage(),
-                      ));
+                onPressed: () async {
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => LoginPage()),
+                    (Route<dynamic> route) => false,
+                  );
                 },
+                icon: Icon(Icons.logout),
                 label: Text("Çıkış Yap"))
           ],
         ),
